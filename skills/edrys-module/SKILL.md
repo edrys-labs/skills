@@ -1,17 +1,15 @@
 ---
 name: edrys-module
 description: >
-  Use when writing, extending, reviewing or debugging an edrys-Lite module, that is a web page (HTML or a
-  single YAML file) loaded in an iframe of a classroom at https://edrys-labs.github.io: the edrys.js API
-  (Edrys.onReady, onUpdate, sendMessage, onMessage, getState, updateState, Awareness, sendStream, onStream),
-  <meta> declarations (show-in, module-config settings form with select, combobox and presets), per-role
-  configs (config, studentConfig, teacherConfig, stationConfig), roles and station modules that talk to
-  hardware (Web Serial, camera, a local server), shared Yjs state, a consistent look, end-to-end tests with
-  edrys-module-tests, and publishing on GitHub Pages. Example requests: "write an Edrys module that shows a
-  sensor from the station", "make a module where students vote", "why doesn't my module receive messages",
-  "my module's settings form is empty", "share the station camera in my module". German - Modul für Edrys
-  schreiben, Edrys-Modul entwickeln, eigenes Modul für das Remote-Labor, Station-Modul für Hardware. For
-  building a lab from existing modules, use the edrys-lab skill.
+  Use when writing, extending, reviewing or debugging an edrys-Lite module, a web page (HTML or one YAML
+  file) loaded in an iframe of a classroom at https://edrys-labs.github.io: the edrys.js API (onReady,
+  sendMessage, onMessage, getState, Awareness, sendStream), <meta> declarations (show-in, module-config
+  settings form), per-role configs, station modules that talk to hardware (Web Serial, camera, a local
+  server), shared Yjs state, a consistent look, tests with edrys-module-tests, publishing on GitHub Pages.
+  Example requests: "write an Edrys module that shows a sensor from the station", "why doesn't my module
+  receive messages", "my module's settings form is empty". German - Modul für Edrys schreiben,
+  Edrys-Modul entwickeln, Station-Modul für Hardware. For building a lab from existing modules, use the
+  edrys-lab skill.
 license: CC0-1.0
 ---
 

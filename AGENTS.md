@@ -32,6 +32,7 @@ The list of published skills lives in `README.md`; it is not repeated here so it
 
 - **`description` is the activation trigger, not documentation.** It must state concretely *when* to use the skill — include example user phrasings, including German ones ("Edrys-Labor erstellen", "Modul für Edrys schreiben"). Vague descriptions ("helps with X") cause agents to miss or misfire the skill.
 - For descriptions longer than a single sentence, use a YAML block scalar (`description: >`) rather than one giant single-line string.
+- Keep `description` at **1024 characters or less** (after YAML folding) and `name` at 64 or less, lowercase and hyphens. claude.ai rejects a skill ZIP that exceeds these limits.
 - Every `SKILL.md` must open with the three required frontmatter fields: `name`, `description`, `license`. `name` must match the folder name. A missing or thin `description` is a bug.
 - `license` in frontmatter is per skill (`CC0-1.0` for all skills) and independent of the repository's own `LICENSE` file (MIT, for the repo's own code/structure).
 - **Naming:** skills start with `edrys-`.
