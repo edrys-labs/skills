@@ -136,15 +136,19 @@ cp -r skills/edrys-module .claude/skills/
 Skills can be uploaded to [claude.ai](https://claude.ai) as ZIP files, one per skill. Code execution must be enabled
 (Settings → Capabilities).
 
-1. Create the ZIPs, each with the skill folder at its top level:
+1. Download the ZIPs of the [latest release](https://github.com/edrys-labs/skills/releases/latest):
+   [edrys-lab.zip](https://github.com/edrys-labs/skills/releases/latest/download/edrys-lab.zip),
+   [edrys-module.zip](https://github.com/edrys-labs/skills/releases/latest/download/edrys-module.zip).
 
-   ```bash
-   git clone https://github.com/edrys-labs/skills && cd skills/skills
-   zip -r edrys-lab.zip edrys-lab -x '*/node_modules/*'
-   zip -r edrys-module.zip edrys-module -x '*/node_modules/*'
-   ```
+2. Upload them under Customize → Skills, and switch them on.
 
-2. Upload them under Settings → Capabilities → Skills, and switch them on.
+To build the ZIPs from `main` yourself, with the skill folder at the top level of each:
+
+```bash
+git clone https://github.com/edrys-labs/skills && cd skills/skills
+zip -r edrys-lab.zip edrys-lab -x '*/node_modules/*'
+zip -r edrys-module.zip edrys-module -x '*/node_modules/*'
+```
 
 All guidance and examples work there. The helper scripts (validate a lab, check a module) run in Claude's sandbox
 only if its network access reaches the npm registry and `edrys-labs.github.io`; otherwise Claude checks the files

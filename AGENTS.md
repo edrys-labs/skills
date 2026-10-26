@@ -20,7 +20,10 @@ skills/<skill-name>/
   scripts/            # optional: helper scripts the skill tells the agent to run
 tests/
   activation.md        # prompts that must (or must not) load each skill; not installed
+.github/workflows/
+  release.yml          # runs check-skills on every push; on a v* tag, publishes one ZIP per skill
 tools/                 # maintainer scripts, not installed with the skills
+  check-skills.mjs     # frontmatter rules claude.ai enforces (name, description length, no < >)
   build-catalog.mjs    # refreshes the GENERATED part of skills/edrys-lab/reference/module-catalog/
   catalog-modules.json # modules in the catalog: file name, published URL, repo
 README.md              # human-facing catalog — one table row + one section per skill
@@ -37,7 +40,7 @@ The list of published skills lives in `README.md`; it is not repeated here so it
   every new trigger or misfire you find.
 - For descriptions longer than a single sentence, use a YAML block scalar (`description: >`) rather than one giant single-line string.
 - Keep `description` at **1024 characters or less** (after YAML folding) and `name` at 64 or less, lowercase and hyphens. No `<` or `>` in either: write "meta tags", not `<meta>`. claude.ai rejects a skill ZIP
-  that breaks any of these rules.
+  that breaks any of these rules; `node tools/check-skills.mjs` checks them.
 - Every `SKILL.md` must open with the three required frontmatter fields: `name`, `description`, `license`. `name` must match the folder name. A missing or thin `description` is a bug.
 - `license` in frontmatter is per skill (`CC0-1.0` for all skills) and independent of the repository's own `LICENSE` file (MIT, for the repo's own code/structure).
 - **Naming:** skills start with `edrys-`.
@@ -72,6 +75,12 @@ If the documentation and the source disagree, the source wins. Behaviour that ch
 4. Cross-references to the skill's name in other skills.
 
 The repo/owner slug used throughout install examples is `edrys-labs/skills` — keep it consistent.
+
+## Releasing
+
+`npx skills` installs from `main`, so a push is enough for those users. claude.ai users download the ZIPs of the
+latest GitHub release: push a tag (`git tag v1.1.0 && git push origin v1.1.0`) after changes worth shipping, and
+the workflow checks the skills and publishes the release with one ZIP per skill.
 
 ## Domain context worth knowing
 
