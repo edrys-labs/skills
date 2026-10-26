@@ -1,0 +1,74 @@
+name: MicroPython over Web Serial
+meta:
+  description: >-
+    Control a real MicroPython board from its REPL, shared from a station via
+    Web Serial: no server to install, only Chrome, Edge or Firefox 151+ at
+    the station.
+  defaultNumberOfRooms: 0
+modules:
+  - url: https://edrys-labs.github.io/module-markdown-it/index.html
+    config:
+      content: |
+        # MicroPython over Web Serial
+
+        1. Open the side menu and enter a **Station** room.
+        2. Type the commands from the task list into the terminal. Everyone in the
+           room shares the board's REPL, so take turns.
+    teacherConfig:
+      content: |
+        > **Teachers:** add the station computer's User ID as a teacher
+        > (`Settings → Members`), then open the link from `Settings → Stations` on it,
+        > in Chrome, Edge or Firefox 151+ (not Safari).
+    showInCustom: lobby
+    width: full
+    height: medium
+
+  - url: https://edrys-labs.github.io/module-markdown-it/index.html
+    config:
+      content: |
+        ## Tasks
+
+        Press Enter in the terminal until you see the `>>>` prompt.
+
+        ```python
+        from machine import Pin
+        led = Pin("LED", Pin.OUT)
+        led.on()
+        led.off()
+        ```
+
+        ```python
+        import time
+        for i in range(10):
+            led.toggle()
+            time.sleep(0.5)
+        ```
+
+        End an indented block with an empty line.
+    stationConfig:
+      content: |
+        ## Station setup
+
+        Plug in the board (MicroPython, e.g. a Raspberry Pi Pico) and the webcam.
+        Click **Connect** in the terminal and pick the board's port. Do it again
+        after reloading this page or replugging the board.
+    showInCustom: station
+    width: half
+    height: tall
+
+  - url: https://edrys-labs.github.io/module-streaming/index.html
+    stationConfig:
+      streamName: Board camera
+      streamQuality: medium
+      video: true
+      audio: false
+    showInCustom: station
+    width: half
+    height: tall
+
+  - url: https://edrys-labs.github.io/module-serial/
+    stationConfig:
+      baud: 115200
+    showInCustom: station
+    width: full
+    height: medium

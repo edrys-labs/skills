@@ -1,0 +1,12 @@
+{
+  "name": "edrys-lab-scripts",
+  "private": true,
+  "type": "module",
+  "description": "Helper scripts of the edrys-lab skill: inspect modules and validate lab files.",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "js-yaml": "4.1.0"
+  }
+}

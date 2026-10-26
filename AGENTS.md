@@ -18,6 +18,9 @@ skills/<skill-name>/
   examples/           # optional: ready-made reference files linked from SKILL.md
   reference/          # optional: topic files linked from SKILL.md
   scripts/            # optional: helper scripts the skill tells the agent to run
+tools/                 # maintainer scripts, not installed with the skills
+  build-catalog.mjs    # refreshes the GENERATED part of skills/edrys-lab/reference/module-catalog/
+  catalog-modules.json # modules in the catalog: file name, published URL, repo
 README.md              # human-facing catalog — one table row + one section per skill
 AGENTS.md              # this file; CLAUDE.md only imports it
 LICENSE                # repo-level MIT license (distinct from each skill's own license field)
@@ -37,6 +40,7 @@ The list of published skills lives in `README.md`; it is not repeated here so it
 - Skills encode hard-won operational gotchas as explicit rules (e.g. "YAML and `fetch` modules run on a `data:` URL, so `Edrys.setItem` does not work there"). When editing, preserve these callouts — they exist because of specific past failures, not generic advice.
 - **Scripts** inside a skill are called with paths relative to the skill folder (`node scripts/validate-lab.mjs lab.yaml`), never with a path into one person's home directory. Keep them dependency-free where possible; name any required external tool in `SKILL.md`.
 - **Cross-reference, don't duplicate.** When two skills touch the same topic (`edrys-lab` uses modules, `edrys-module` builds them), one explains it and the other points to it by skill name.
+- **Module catalog:** each file in `skills/edrys-lab/reference/module-catalog/` has a part between `GENERATED` markers, which `node tools/build-catalog.mjs` rewrites from the published module (run `npm install --prefix skills/edrys-lab/scripts` once). Write by hand only outside the markers. To add a module, add it to `tools/catalog-modules.json` and run the tool.
 - **Examples must work.** Every example lab or module is loaded in a real edrys-Lite before it is committed.
 
 ## Ground truth

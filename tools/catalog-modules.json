@@ -1,0 +1,20 @@
+[
+  { "file": "markdown-it", "url": "https://edrys-labs.github.io/module-markdown-it/index.html", "repo": "edrys-labs/module-markdown-it" },
+  { "file": "monaco-editor", "url": "https://edrys-labs.github.io/module-monaco-editor/", "repo": "edrys-labs/module-monaco-editor" },
+  { "file": "pyxtermjs", "url": "https://edrys-labs.github.io/module-pyxtermjs/index.html", "repo": "edrys-labs/module-pyxtermjs" },
+  { "file": "streaming", "url": "https://edrys-labs.github.io/module-streaming/index.html", "repo": "edrys-labs/module-streaming" },
+  { "file": "serial", "url": "https://edrys-labs.github.io/module-serial/", "repo": "edrys-labs/module-serial" },
+  { "file": "avr8js", "url": "https://edrys-labs.github.io/module-avr8js/index.html", "repo": "edrys-labs/module-avr8js" },
+  { "file": "blockly-duino-v2", "url": "https://edrys-labs.github.io/module-blockly-duino-v2/index.html", "repo": "edrys-labs/module-blockly-duino-v2" },
+  { "file": "arduinoview", "url": "https://edrys-labs.github.io/module-arduinoview/index.html", "repo": "edrys-labs/module-arduinoview" },
+  { "file": "micropython-simulator", "url": "https://edrys-labs.github.io/module-micropython-simulator/index.html", "repo": "edrys-labs/module-micropython-simulator" },
+  { "file": "micropython-webrepl", "url": "https://edrys-labs.github.io/module-micropython-webrepl/", "repo": "edrys-labs/module-micropython-webrepl" },
+  { "file": "hardware-control", "url": "https://edrys-labs.github.io/module-hardware-control/index.html", "repo": "edrys-labs/module-hardware-control" },
+  { "file": "station-light-control", "url": "https://edrys-labs.github.io/module-station-light-control/index.html", "repo": "edrys-labs/module-station-light-control" },
+  { "file": "code-logger", "url": "https://edrys-labs.github.io/module-code-logger/", "repo": "edrys-labs/module-code-logger" },
+  { "file": "liascript", "url": "https://edrys-labs.github.io/module-liascript/index.html", "repo": "edrys-labs/module-liascript" },
+  { "file": "iframe", "url": "https://edrys-labs.github.io/module-iframe/index.html", "repo": "edrys-labs/module-iframe" },
+  { "file": "survey", "url": "https://edrys-labs.github.io/module-survey/index.html", "repo": "edrys-labs/module-survey" },
+  { "file": "whiteboard", "url": "https://edrys-labs.github.io/module-whiteboard/index.html", "repo": "edrys-labs/module-whiteboard" },
+  { "file": "quill", "url": "https://edrys-labs.github.io/module-quill/index.html", "repo": "edrys-labs/module-quill" }
+]

@@ -1,0 +1,84 @@
+name: Arduino Remote Lab
+meta:
+  description: >-
+    Program a real Arduino Uno from the browser: edit the sketch, press
+    Execute, and watch the board through the camera while the terminal shows
+    the compiler and serial output.
+  defaultNumberOfRooms: 0
+modules:
+  - url: https://edrys-labs.github.io/module-markdown-it/index.html
+    config:
+      content: |
+        # Arduino Remote Lab
+
+        1. Open the side menu and enter a **Station** room.
+        2. Change the code in the editor (for example the `delay`) and press **Execute**.
+        3. The code is compiled and uploaded to the board. The camera shows the LED,
+           the terminal shows what the board prints.
+    teacherConfig:
+      content: |
+        > **Teachers:** add the station computer's User ID as a teacher
+        > (`Settings → Members`), then open the link from `Settings → Stations` on it.
+    stationConfig:
+      content: |
+        ## Station setup
+
+        Plug in the Arduino Uno and the webcam, then start the terminal server:
+
+        ```bash
+        docker run -it -p 127.0.0.1:5000:5000 --device=/dev/ttyACM0:/dev/ttyACM0 edryslabs/module-pyxtermjs:latest
+        ```
+
+        If the board is on another port (`ls /dev/ttyACM* /dev/ttyUSB*`), map it:
+        `--device=/dev/ttyUSB0:/dev/ttyACM0`.
+    showInCustom: lobby, station
+    width: full
+    height: short
+
+  - url: https://edrys-labs.github.io/module-monaco-editor/
+    config:
+      synchronize: true
+      language: cpp
+      runCommand: execute
+      value: |
+        void setup() {
+          pinMode(LED_BUILTIN, OUTPUT);
+          Serial.begin(9600);
+        }
+
+        void loop() {
+          digitalWrite(LED_BUILTIN, HIGH);
+          Serial.println("on");
+          delay(1000);
+          digitalWrite(LED_BUILTIN, LOW);
+          Serial.println("off");
+          delay(1000);
+        }
+    showInCustom: station
+    width: half
+    height: tall
+
+  - url: https://edrys-labs.github.io/module-streaming/index.html
+    stationConfig:
+      streamName: Board camera
+      streamQuality: medium
+      video: true
+      audio: false
+    showInCustom: station
+    width: half
+    height: tall
+
+  - url: https://edrys-labs.github.io/module-pyxtermjs/index.html
+    stationConfig:
+      server: http://localhost:5000/pty
+      execute: execute
+      workflow: arduino-avr
+      board: arduino:avr:uno
+      port: /dev/ttyACM0
+      baud: 9600
+      enable:
+        student: true
+        teacher: true
+    showInCustom: station
+    width: full
+    height: medium

@@ -3,7 +3,7 @@
 A collection of [Agent Skills](https://agentskills.io) for [edrys-Lite](https://edrys-labs.github.io), the browser-based platform for remote labs and virtual classrooms. Compatible with GitHub Copilot, Claude Code, Cursor, Gemini CLI, and [50+ other agents](https://agentskills.io/clients).
 
 > [!NOTE]
-> Work in progress: the skills below are being written and are not published yet.
+> Work in progress: `edrys-module` is being written and is not published yet.
 
 ---
 

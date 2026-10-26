@@ -1,0 +1,59 @@
+name: Arduino Simulation
+meta:
+  description: >-
+    Learn Arduino programming without hardware: every student edits and runs
+    their own sketch on a simulated Arduino Uno with a button and LEDs.
+  defaultNumberOfRooms: 0
+modules:
+  - url: https://edrys-labs.github.io/module-markdown-it/index.html
+    config:
+      content: |
+        # Arduino Simulation
+
+        The board on the right is simulated in your browser. Press **Execute** to
+        compile your code and run it.
+
+        1. Run the code and press the green button: the red LED lights up.
+        2. Make the blue LED blink while the button is **not** pressed.
+        3. Print `pressed` to the serial monitor whenever the button is pressed.
+    showInCustom: lobby
+    width: full
+    height: short
+
+  - url: https://edrys-labs.github.io/module-monaco-editor/
+    config:
+      synchronize: false
+      language: cpp
+      runCommand: execute
+      value: |
+        const int BUTTON = 2;
+        const int RED = 13;
+        const int BLUE = 12;
+
+        void setup() {
+          pinMode(BUTTON, INPUT_PULLUP);
+          pinMode(RED, OUTPUT);
+          pinMode(BLUE, OUTPUT);
+          Serial.begin(9600);
+          Serial.println("ready");
+        }
+
+        void loop() {
+          bool pressed = digitalRead(BUTTON) == LOW;
+          digitalWrite(RED, pressed);
+        }
+    showInCustom: lobby
+    width: half
+    height: tall
+
+  - url: https://edrys-labs.github.io/module-avr8js/index.html
+    config:
+      execute: execute
+      synchronize: false
+      modules: |
+        <wokwi-pushbutton color='green' pin='2'></wokwi-pushbutton>
+        <wokwi-led color='red' pin='13' label='13'></wokwi-led>
+        <wokwi-led color='blue' pin='12' label='12'></wokwi-led>
+    showInCustom: lobby
+    width: half
+    height: tall

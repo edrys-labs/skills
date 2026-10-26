@@ -1,0 +1,58 @@
+name: Linux Terminal Basics
+meta:
+  description: >-
+    Learn the essential Bash commands in a real Linux shell, shared from a
+    station: everyone in the station room types into the same terminal.
+  defaultNumberOfRooms: 0
+modules:
+  - url: https://edrys-labs.github.io/module-markdown-it/index.html
+    config:
+      content: |
+        # Linux Terminal Basics
+
+        1. Open the side menu and enter a **Station** room.
+        2. Work through the tasks there. Everyone in the room shares one terminal,
+           so take turns.
+    teacherConfig:
+      content: |
+        > **Teachers:** add the station computer's User ID as a teacher
+        > (`Settings → Members`), then open the link from `Settings → Stations` on it.
+    showInCustom: lobby
+    width: full
+    height: medium
+
+  - url: https://edrys-labs.github.io/module-markdown-it/index.html
+    config:
+      content: |
+        ## Tasks
+
+        | Task | Command |
+        |------|---------|
+        | Where am I? | `pwd` |
+        | What is here? | `ls -la` |
+        | Make a folder and go into it | `mkdir lab && cd lab` |
+        | Create a file | `echo "hello" > hello.txt` |
+        | Show it | `cat hello.txt` |
+        | Find text in files | `grep -r hello .` |
+    stationConfig:
+      content: |
+        ## Station setup
+
+        Start the terminal server on this computer, then reload this page:
+
+        ```bash
+        docker run -it -p 127.0.0.1:5000:5000 edryslabs/module-pyxtermjs:latest
+        ```
+    showInCustom: station
+    width: half
+    height: tall
+
+  - url: https://edrys-labs.github.io/module-pyxtermjs/index.html
+    stationConfig:
+      server: http://localhost:5000/pty
+      enable:
+        student: true
+        teacher: true
+    showInCustom: station
+    width: half
+    height: tall
