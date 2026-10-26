@@ -52,14 +52,16 @@ no server; every peer runs the module's code. Checked against edrys-Lite 3.1.0.
    sender's role where a command must come from a teacher or the station; render peer content with
    `textContent`.
 6. **Check.** `node scripts/check-module.mjs <file>` (run `npm install --prefix scripts` once; Node 18+). Then go
-   through [checklist.md](reference/checklist.md).
+   through [checklist.md](reference/checklist.md). "the description links no repository" is expected until the
+   module has one; add the link then, never a made-up URL.
 7. **Test with several peers** ([testing.md](reference/testing.md)): `node scripts/serve.mjs <folder>` and add
    `http://localhost:8080/` to a class at https://edrys-labs.github.io; a second window as a student; a late
    joiner; a reload; the station. Automate with edrys-module-tests when the module is to be maintained.
 8. **Deliver**: the files, a README ([publishing.md](reference/publishing.md)), the URL it will have, and an
    example lab entry for the edrys-lab skill.
 
-Paths are relative to this skill's folder.
+Script and example paths are relative to this skill's folder; give the module's own file or folder to the
+scripts as an absolute path.
 
 | Example | Shows |
 |---------|-------|

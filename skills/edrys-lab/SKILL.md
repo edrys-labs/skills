@@ -48,8 +48,8 @@ is no server that stores it. Everything below is checked against edrys-Lite 3.1.
    `stationConfig` (setup instructions for whoever runs the station go into the Markdown module's
    `stationConfig`). Use `|` blocks for Markdown and code.
 5. **Validate.** `node scripts/validate-lab.mjs lab.yaml` fetches every module and checks the configs against
-   its schema. Fix all errors; read every warning. Paths are relative to this skill's folder; run
-   `npm install --prefix scripts` once (Node 18+).
+   its schema. Fix all errors; read every warning. Script paths are relative to this skill's folder; give the
+   lab file as an absolute path. Run `npm install --prefix scripts` once (Node 18+).
 6. **Deliver.** The YAML, plus for a station lab the exact `docker run` line (from
    [stations.md](reference/stations.md)) and the steps: add the station computer's User ID as a teacher, open
    the station link. For a repository, follow [lab-repo.md](reference/lab-repo.md); the deploy link is
