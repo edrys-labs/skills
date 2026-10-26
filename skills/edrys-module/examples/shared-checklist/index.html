@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shared Checklist</title>
+    <meta
+      name="description"
+      content="Example shared-state module: a checklist everyone in the room ticks together, with who is viewing it."
+    />
+    <meta name="show-in" content="*" />
+    <meta name="icon" content="mdi-checkbox-marked-outline" />
+    <meta
+      name="module-config"
+      content="{
+        'config': {
+          'items': { 'type': 'text-area', 'hint': 'One checklist item per line' },
+          'channel': { 'type': 'string', 'hint': 'Only needed for two checklists in one room: give each its own name' }
+        }
+      }"
+    />
+
+    <script src="https://edrys-labs.github.io/module/edrys.js"></script>
+    <link rel="stylesheet" href="https://edrys-labs.github.io/module/vendor/water.min.css" />
+    <link rel="stylesheet" href="https://edrys-labs.github.io/module/vendor/open-iconic/css/open-iconic.min.css" />
+
+    <style>
+      /* author `display` rules would otherwise override the hidden attribute */
+      [hidden] {
+        display: none !important;
+      }
+      body {
+        margin: 0;
+        padding: 0.5rem 0.75rem;
+        max-width: none;
+      }
+      .header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem 1rem;
+        margin-bottom: 0.5rem;
+      }
+      .title {
+        font-size: 1.4em;
+        line-height: 1;
+        margin: 0;
+      }
+      .controls {
+        margin-left: auto;
+        font-size: small;
+      }
+      .controls button {
+        margin: 0;
+      }
+      .muted {
+        opacity: 0.7;
+      }
+      /* replaced once Edrys is ready; appears only after 0.5s, so fast loads don't flicker */
+      .loading {
+        opacity: 0;
+        animation: show-loading 0s 0.5s forwards;
+      }
+      @keyframes show-loading {
+        to {
+          opacity: 0.6;
+        }
+      }
+      #items {
+        list-style: none;
+        padding: 0;
+      }
+      #items li {
+        margin: 0.25rem 0;
+      }
+      #items label {
+        display: inline;
+      }
+      #items .by {
+        font-size: small;
+        opacity: 0.7;
+        margin-left: 0.5rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="header">
+      <h1 class="title">Checklist</h1>
+      <span id="progress" class="muted"></span>
+      <div class="controls">
+        <button id="reset" hidden>
+          <span class="oi" data-glyph="reload" aria-hidden="true"></span> Reset
+        </button>
+      </div>
+    </header>
+
+    <p id="message" class="loading">Loading&hellip;</p>
+    <ul id="items"></ul>
+    <p id="viewers" class="muted"></p>
+
+    <script>
+      // done: a Y.Map item text -> { by, at }, shared by everyone in the room.
+      // Keys are prefixed with the module name, and with the channel if set.
+      let doneKey = ''
+      let done = null
+      let awareness = null
+      let items = []
+
+      function config() {
+        const c = Edrys.module.config
+        return c && typeof c === 'object' ? c : {}
+      }
+
+      function readItems() {
+        return String(config().items || '')
+          .split('\n')
+          .map((line) => line.trim())
+          .filter(Boolean)
+      }
+
+      // getState creates the map if this peer doesn't have the key yet. If two peers
+      // create it at the same time, Yjs keeps one of them: rebind whenever the key's
+      // value changes, or this peer would edit a map nobody else sees.
+      function bind() {
+        const current = Edrys.getState(doneKey, 'Map')
+        if (current === done) return
+        done?.unobserve(render)
+        done = current
+        done.observe(render)
+        render()
+      }
+
+      function toggle(item, checked) {
+        Edrys.updateState(() => {
+          if (checked) done.set(item, { by: Edrys.liveUser?.displayName || Edrys.username, at: Date.now() })
+          else done.delete(item)
+        })
+      }
+
+      // The list is built once; render() only updates it, so a box keeps its
+      // focus while others tick theirs
+      function build() {
+        document.getElementById('items').replaceChildren(
+          ...items.map((item, i) => {
+            const li = document.createElement('li')
+            const box = document.createElement('input')
+            box.type = 'checkbox'
+            box.id = 'item-' + i
+            box.addEventListener('change', () => toggle(item, box.checked))
+            const label = document.createElement('label')
+            label.htmlFor = box.id
+            // textContent, never innerHTML: config and names are not markup
+            label.textContent = item
+            const by = document.createElement('span')
+            by.className = 'by'
+            li.append(box, ' ', label, by)
+            return li
+          })
+        )
+      }
+
+      function render() {
+        const rows = document.getElementById('items').children
+        items.forEach((item, i) => {
+          const entry = done.get(item)
+          rows[i].querySelector('input').checked = !!entry
+          rows[i].querySelector('.by').textContent = entry ? '✓ ' + entry.by : ''
+        })
+        const count = items.filter((item) => done.has(item)).length
+        document.getElementById('progress').textContent = `${count} / ${items.length} done`
+      }
+
+      function renderViewers() {
+        const names = [...awareness.getStates().values()]
+          .map((state) => state.user?.name)
+          .filter(Boolean)
+        document.getElementById('viewers').textContent = names.length ? 'Viewing: ' + names.join(', ') : ''
+      }
+
+      Edrys.onReady(() => {
+        items = readItems()
+        const message = document.getElementById('message')
+        message.className = 'muted'
+        if (!items.length) {
+          message.textContent = 'No items: set "items" in the module settings, one per line.'
+          return
+        }
+        message.hidden = true
+        build()
+
+        const channel = String(config().channel || '').trim()
+        doneKey = 'checklist.' + (channel ? channel + '.' : '') + 'done'
+
+        bind()
+        Edrys.getState().observe((event) => {
+          if (event.keysChanged.has(doneKey)) bind()
+        })
+
+        // Awareness: short-lived "who is here", removed when a peer leaves
+        awareness = Edrys.getState(doneKey, 'Awareness')
+        awareness.setLocalStateField('user', { name: Edrys.liveUser?.displayName || Edrys.username })
+        awareness.on('change', renderViewers)
+        renderViewers()
+
+        if (Edrys.role === 'teacher') {
+          const reset = document.getElementById('reset')
+          reset.hidden = false
+          // Clear the map's content instead of replacing the map others are bound to
+          reset.addEventListener('click', () =>
+            Edrys.updateState(() => [...done.keys()].forEach((key) => done.delete(key)))
+          )
+        }
+      })
+    </script>
+  </body>
+</html>

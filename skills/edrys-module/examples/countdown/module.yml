@@ -1,0 +1,104 @@
+name: Countdown
+
+description: >-
+  Example YAML module: a countdown the teacher starts for everyone in the room.
+  Late joiners see the running countdown, because its end time is in the room state.
+
+show-in:
+  - '*'
+
+icon: mdi-timer-outline
+
+load:
+  scripts:
+    - https://edrys-labs.github.io/module/edrys.js
+  links:
+    - https://edrys-labs.github.io/module/vendor/water.min.css
+    - https://edrys-labs.github.io/module/vendor/open-iconic/css/open-iconic.min.css
+
+# A string, not a YAML map: the settings form only reads a string here
+module-config: |
+  teacherConfig:
+    minutes:
+      type: number
+      default: 5
+      hint: Length of the countdown in minutes
+
+style: |
+  /* author `display` rules would otherwise override the hidden attribute */
+  [hidden] { display: none !important; }
+  /* replaced once Edrys is ready; appears only after 0.5s, so fast loads don't flicker */
+  .loading { opacity: 0; animation: show-loading 0s 0.5s forwards; }
+  @keyframes show-loading { to { opacity: 0.6; } }
+  body { margin: 0; padding: 0.5rem 0.75rem; max-width: none; text-align: center; }
+  #time { font-size: 3em; font-family: monospace; margin: 0.5rem 0; }
+  #time.over { color: #b8384a; }
+  .muted { opacity: 0.7; }
+  .controls { display: flex; justify-content: center; gap: 0.5rem; }
+  .controls button { margin: 0; }
+
+body: |
+  <p id="time" class="loading" aria-live="polite">Loading&hellip;</p>
+  <p id="status" class="muted"></p>
+  <div class="controls" id="controls" hidden>
+    <button id="start"><span class="oi" data-glyph="media-play" aria-hidden="true"></span> Start</button>
+    <button id="reset"><span class="oi" data-glyph="media-stop" aria-hidden="true"></span> Reset</button>
+  </div>
+
+main: |
+  // main runs in <head>, before the body exists: touch the DOM only in onReady.
+  // This page runs on a data: URL, so localStorage and Edrys.setItem are not available,
+  // and the whole file must be ASCII: write &hellip; in HTML and \u2026 in JS, not the character itself.
+
+  // State key, prefixed with the module name. The value is the end time in ms
+  // (the teacher's clock), or 0 when no countdown runs.
+  const END = 'countdown.end'
+  const DEFAULT_MINUTES = 5
+
+  function minutes() {
+    const c = Edrys.module.teacherConfig
+    const m = c && typeof c === 'object' ? Number(c.minutes) : NaN
+    return m > 0 ? m : DEFAULT_MINUTES
+  }
+
+  function end() {
+    return Edrys.getState(END, 'Value') || 0
+  }
+
+  function format(ms) {
+    const s = Math.ceil(ms / 1000)
+    return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0')
+  }
+
+  function render() {
+    const time = document.getElementById('time')
+    const status = document.getElementById('status')
+    time.classList.remove('loading')
+    const target = end()
+    if (!target) {
+      time.textContent = '--:--'
+      time.classList.remove('over')
+      status.textContent = Edrys.role === 'teacher' ? 'Press Start to begin.' : 'Waiting for the teacher to start.'
+      return
+    }
+    const left = target - Date.now()
+    time.textContent = format(Math.max(0, left))
+    time.classList.toggle('over', left <= 0)
+    status.textContent = left > 0 ? 'Running' : 'Time is up'
+  }
+
+  Edrys.onReady(() => {
+    if (Edrys.role === 'teacher') {
+      document.getElementById('controls').hidden = false
+      document.getElementById('start').onclick = () =>
+        Edrys.getState(END, 'Value', Date.now() + minutes() * 60000)
+      document.getElementById('reset').onclick = () => Edrys.getState(END, 'Value', 0)
+    }
+
+    // React to changes of our key only, not to every update in the class
+    Edrys.getState().observe((event) => {
+      if (event.keysChanged.has(END)) render()
+    })
+    render()
+    setInterval(render, 250)
+  })

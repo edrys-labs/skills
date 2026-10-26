@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Serial Bridge</title>
+    <meta
+      name="description"
+      content="Example station module: the station connects a serial device via Web Serial; everyone in the station room sees its output and can send lines to it."
+    />
+    <meta name="show-in" content="station" />
+    <meta name="icon" content="mdi-serial-port" />
+    <meta
+      name="module-config"
+      content="{
+        'stationConfig': {
+          'baud': { 'type': 'combobox', 'options': ['9600', '115200'], 'default': '9600', 'hint': 'Baud rate of the device' }
+        }
+      }"
+    />
+
+    <script src="https://edrys-labs.github.io/module/edrys.js"></script>
+    <link rel="stylesheet" href="https://edrys-labs.github.io/module/vendor/water.min.css" />
+    <link rel="stylesheet" href="https://edrys-labs.github.io/module/vendor/open-iconic/css/open-iconic.min.css" />
+
+    <style>
+      /* author `display` rules would otherwise override the hidden attribute */
+      [hidden] {
+        display: none !important;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        padding: 0.5rem 0.75rem;
+        max-width: none;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+      }
+      .header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem 1rem;
+        margin-bottom: 0.5rem;
+      }
+      .title {
+        font-size: 1.4em;
+        line-height: 1;
+        margin: 0;
+      }
+      .status {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .badge {
+        padding: 0.1rem 0.6rem;
+        border-radius: 999px;
+        color: #fff;
+        font-size: small;
+        background: #6b6b6b;
+      }
+      .badge.on {
+        background: #1f7a45;
+      }
+      .badge.off {
+        background: #b8384a;
+      }
+      .controls {
+        margin-left: auto;
+        display: flex;
+        gap: 0.5rem;
+        font-size: small;
+      }
+      .controls button {
+        margin: 0;
+      }
+      #output {
+        flex: 1;
+        min-height: 4rem;
+        overflow: auto;
+        margin: 0 0 0.5rem;
+        white-space: pre-wrap;
+      }
+      form {
+        display: flex;
+        gap: 0.5rem;
+        margin: 0;
+      }
+      form input {
+        flex: 1;
+        margin: 0;
+      }
+      form button {
+        margin: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="header">
+      <h1 class="title">Serial</h1>
+      <div class="status"><span id="badge" class="badge wait">loading&hellip;</span></div>
+      <div class="controls" id="station-controls" hidden>
+        <button id="connect">
+          <span class="oi" data-glyph="link-intact" aria-hidden="true"></span> Connect
+        </button>
+      </div>
+    </header>
+
+    <pre id="output" aria-live="polite"></pre>
+
+    <form id="send">
+      <input id="line" type="text" placeholder="Line to send to the device" aria-label="Line to send" autocomplete="off" />
+      <button type="submit"><span class="oi" data-glyph="arrow-thick-right" aria-hidden="true"></span> Send</button>
+    </form>
+
+    <script>
+      // Message subjects (same module URL, so no promiscuous listener is needed)
+      const OUTPUT = 'serial-bridge.output' // station -> room: text from the device
+      const INPUT = 'serial-bridge.input' // room -> station: a line for the device
+      // State: the device status, so late joiners see it
+      const STATUS = 'serial-bridge.status'
+      const DEFAULT_BAUD = 9600
+      const MAX_OUTPUT = 20000
+
+      const STATUS_TEXT = { on: 'connected', off: 'not connected', wait: 'connecting…' }
+
+      let port = null
+      let writer = null
+
+      function baud() {
+        const c = Edrys.module.stationConfig
+        const b = parseInt(c && typeof c === 'object' ? c.baud : '')
+        return b > 0 ? b : DEFAULT_BAUD
+      }
+
+      function append(text) {
+        const output = document.getElementById('output')
+        output.textContent = (output.textContent + text).slice(-MAX_OUTPUT)
+        output.scrollTop = output.scrollHeight
+      }
+
+      function setStatus(state) {
+        Edrys.getState(STATUS, 'Value', state)
+      }
+
+      function renderStatus() {
+        const state = Edrys.getState(STATUS, 'Value') || 'off'
+        const badge = document.getElementById('badge')
+        badge.className = 'badge ' + state
+        badge.textContent = STATUS_TEXT[state] || state
+      }
+
+      // ---- station side: owns the port ----
+
+      async function open(selected) {
+        setStatus('wait')
+        try {
+          await selected.open({ baudRate: baud() })
+        } catch (error) {
+          setStatus('off')
+          // e.g. the port is used by another program or tab
+          Edrys.sendMessage(OUTPUT, `\n[could not open the port: ${error.message}]\n`)
+          return
+        }
+        port = selected
+        port.addEventListener('disconnect', () => {
+          port = writer = null
+          setStatus('off')
+          Edrys.sendMessage(OUTPUT, '\n[device disconnected]\n')
+        })
+        setStatus('on')
+        read()
+      }
+
+      async function read() {
+        // A read error (wrong baud, device reset) ends only the current stream
+        while (port?.readable) {
+          const reader = port.readable.pipeThrough(new TextDecoderStream()).getReader()
+          try {
+            while (true) {
+              const { value, done } = await reader.read()
+              if (done) return
+              if (value) Edrys.sendMessage(OUTPUT, value)
+            }
+          } catch (error) {
+            Edrys.sendMessage(OUTPUT, `\n[serial error: ${error.message}]\n`)
+          } finally {
+            reader.releaseLock()
+          }
+        }
+      }
+
+      async function write(text) {
+        if (!port?.writable) {
+          Edrys.sendMessage(OUTPUT, '\n[no device connected at the station, input is not sent]\n')
+          return
+        }
+        if (!writer) {
+          const encoder = new TextEncoderStream()
+          encoder.readable.pipeTo(port.writable).catch(() => {})
+          writer = encoder.writable.getWriter()
+        }
+        await writer.write(text)
+      }
+
+      async function startStation() {
+        document.getElementById('station-controls').hidden = false
+        // After a reload the port is closed, whatever the state says
+        setStatus('off')
+
+        if (!('serial' in navigator)) {
+          Edrys.sendMessage(OUTPUT, '[this station browser has no Web Serial: use Chrome, Edge or Firefox 151+]\n')
+          return
+        }
+
+        // One click by the person at the station grants the port ...
+        document.getElementById('connect').addEventListener('click', async () => {
+          if (port) return
+          try {
+            await open(await navigator.serial.requestPort())
+          } catch (error) {
+            append(`\n[no port chosen: ${error.message}]\n`)
+          }
+        })
+        // ... after that, a granted port is reopened without a click
+        const [granted] = await navigator.serial.getPorts()
+        if (granted) await open(granted)
+      }
+
+      // ---- every role ----
+
+      Edrys.onReady(() => {
+        Edrys.onMessage(({ subject, body }) => {
+          if (subject === OUTPUT) append(String(body))
+          else if (subject === INPUT && Edrys.role === 'station') write(String(body))
+        })
+
+        Edrys.getState().observe((event) => {
+          if (event.keysChanged.has(STATUS)) renderStatus()
+        })
+        renderStatus()
+
+        if (Edrys.role === 'station') startStation()
+        else append('Output of the device at the station appears here.\n')
+
+        document.getElementById('send').addEventListener('submit', (event) => {
+          event.preventDefault()
+          const input = document.getElementById('line')
+          if (!input.value) return
+          Edrys.sendMessage(INPUT, input.value + '\n')
+          input.value = ''
+        })
+      })
+    </script>
+  </body>
+</html>

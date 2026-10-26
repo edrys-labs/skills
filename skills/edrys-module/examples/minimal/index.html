@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wave</title>
+    <meta
+      name="description"
+      content="Minimal example module: shows a greeting from the module settings and lets everyone in the room wave."
+    />
+    <meta name="show-in" content="*" />
+    <meta name="icon" content="mdi-hand-wave" />
+    <meta
+      name="module-config"
+      content="{
+        'config': {
+          'greeting': { 'type': 'string', 'default': 'Hello', 'hint': 'Shown to everyone above the wave button' }
+        },
+        'teacherConfig': {
+          'note': { 'type': 'text-area', 'hint': 'Extra text, shown to teachers only (not secret: every browser receives it)' }
+        }
+      }"
+    />
+
+    <script src="https://edrys-labs.github.io/module/edrys.js"></script>
+    <link rel="stylesheet" href="https://edrys-labs.github.io/module/vendor/water.min.css" />
+    <link rel="stylesheet" href="https://edrys-labs.github.io/module/vendor/open-iconic/css/open-iconic.min.css" />
+
+    <style>
+      /* author `display` rules would otherwise override the hidden attribute */
+      [hidden] {
+        display: none !important;
+      }
+      body {
+        margin: 0;
+        padding: 0.5rem 0.75rem;
+        max-width: none;
+      }
+      .header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem 1rem;
+        margin-bottom: 0.5rem;
+      }
+      .title {
+        font-size: 1.4em;
+        line-height: 1;
+        margin: 0;
+      }
+      .controls {
+        margin-left: auto;
+        font-size: small;
+      }
+      .controls button {
+        margin: 0;
+      }
+      .muted {
+        opacity: 0.7;
+      }
+      /* replaced once Edrys is ready; appears only after 0.5s, so fast loads don't flicker */
+      .loading {
+        opacity: 0;
+        animation: show-loading 0s 0.5s forwards;
+      }
+      @keyframes show-loading {
+        to {
+          opacity: 0.6;
+        }
+      }
+      #waves {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      #waves time {
+        font-family: monospace;
+        opacity: 0.7;
+        margin-right: 0.5rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="header">
+      <h1 class="title" id="greeting">Wave</h1>
+      <div class="controls">
+        <button id="wave" disabled>
+          <span class="oi" data-glyph="bullhorn" aria-hidden="true"></span> Wave
+        </button>
+      </div>
+    </header>
+
+    <p id="who" class="loading">Loading&hellip;</p>
+    <p id="note" hidden></p>
+    <ul id="waves"></ul>
+    <p id="empty" class="muted" hidden>No waves yet.</p>
+
+    <script>
+      // Messages from this module to all modules with the same URL in the room
+      const WAVE = 'wave'
+      const DEFAULTS = { greeting: 'Hello', note: '' }
+      const MAX_WAVES = 50
+
+      // Configs can be an object, a string, '' or undefined; '' means "default"
+      function settings() {
+        const merged = { ...DEFAULTS }
+        for (const c of [Edrys.module.config, Edrys.module[Edrys.role + 'Config']]) {
+          if (!c || typeof c !== 'object') continue
+          for (const [key, value] of Object.entries(c)) {
+            if (value !== '' && value !== null && value !== undefined) merged[key] = value
+          }
+        }
+        return merged
+      }
+
+      function nameOf(username) {
+        return Edrys.liveClass?.users?.[username]?.displayName || username
+      }
+
+      function showWave({ from, date }) {
+        const item = document.createElement('li')
+        const time = document.createElement('time')
+        time.textContent = new Date(date || Date.now()).toLocaleTimeString()
+        // textContent, never innerHTML: names come from other peers
+        item.append(time, `${nameOf(from)} waves`)
+        const list = document.getElementById('waves')
+        list.prepend(item)
+        while (list.children.length > MAX_WAVES) list.lastChild.remove()
+        document.getElementById('empty').hidden = true
+      }
+
+      Edrys.onReady(() => {
+        const s = settings()
+        document.getElementById('greeting').textContent = String(s.greeting)
+        const who = document.getElementById('who')
+        who.className = 'muted'
+        who.textContent = `You are ${Edrys.liveUser?.displayName || Edrys.username} (${Edrys.role}) in ${Edrys.liveUser?.room}.`
+
+        const note = document.getElementById('note')
+        if (Edrys.role === 'teacher' && s.note) {
+          note.textContent = String(s.note)
+          note.hidden = false
+        }
+
+        document.getElementById('empty').hidden = false
+
+        // The sender gets its own message too, so it shows up here as well
+        Edrys.onMessage((message) => {
+          if (message.subject === WAVE) showWave(message)
+        })
+
+        const button = document.getElementById('wave')
+        button.disabled = false
+        // A message needs a body; an undefined body is dropped
+        button.addEventListener('click', () => Edrys.sendMessage(WAVE, { at: Date.now() }))
+      })
+    </script>
+  </body>
+</html>
