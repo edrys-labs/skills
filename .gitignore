@@ -1,0 +1,4 @@
+# build caches of skill helper scripts
+node_modules/
+__pycache__/
+*.pyc
