@@ -89,7 +89,7 @@ None of these shows an error in edrys-Lite; the module just doesn't work.
 | `sendStream`/`onStream` without the same `streamName` | stream never connects | explicit `streamName` on both sides |
 | Boolean field on by default without `default: true` in the schema | the first Save in the form turns it off | declare `default` |
 | YAML module: `module-config` as a map, or `show-in` as a string | no settings form / module fails to load | `module-config: \|` string; `show-in: ['*']` |
-| YAML or `fetch` module with `…`, `ü`, `✓` | shown as `%u2026` | `&hellip;`, `…` |
+| YAML or `fetch` module with `…`, `ü`, `✓` | shown as `%u2026` | `&hellip;` in HTML, `\u2026` in JS |
 | YAML or `fetch` module with `localStorage` / `Edrys.setItem` / relative URLs | throws / 404 | HTML module, or absolute URLs and no storage |
 | `display: flex` on an element with `hidden` | role-only controls visible to everyone | `[hidden] { display: none !important; }` |
 | Served without CORS (`python -m http.server`) | module shows as an error | `scripts/serve.mjs`, GitHub Pages |

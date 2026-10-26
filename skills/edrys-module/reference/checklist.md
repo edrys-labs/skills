@@ -14,7 +14,7 @@ the items marked ⚙ automatically. Details are in the linked files.
 - [ ] Every config field the code reads is declared, in the section the code reads it from, and nothing else is.
 - [ ] Fields whose module default isn't the form's start value declare `default` (a boolean that is on by
       default: `default: true`).
-- [ ] ⚙ YAML/`fetch` modules: ASCII only (`&hellip;`, `…`), no `localStorage`/`Edrys.setItem`, only
+- [ ] ⚙ YAML/`fetch` modules: ASCII only (`&hellip;`, `\u2026`), no `localStorage`/`Edrys.setItem`, only
       absolute asset URLs.
 
 ## Lifecycle ([api.md](api.md#lifecycle))

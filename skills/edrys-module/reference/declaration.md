@@ -119,7 +119,7 @@ The page has an opaque origin (`"null"`):
 
 - **Only ASCII.** edrys-Lite encodes the page with `escape()`, which turns `…` into `%u2026`, and the page
   shows that literally (`Loading%u2026`). Write HTML entities in markup (`Loading&hellip;`, `&#10003;`),
-  `…` in JS strings and `\2026` in CSS `content`.
+  `\u2026` in JS strings and `\2026` in CSS `content`.
 - `localStorage`, `sessionStorage`, IndexedDB and cookies throw; so does `Edrys.setItem`.
 - Relative URLs don't resolve. Use absolute URLs for every asset.
 - Service workers and ES module imports by relative path don't work.
