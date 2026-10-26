@@ -36,7 +36,8 @@ The list of published skills lives in `README.md`; it is not repeated here so it
 - After changing a `description`, run the prompts in [`tests/activation.md`](tests/activation.md); add a row for
   every new trigger or misfire you find.
 - For descriptions longer than a single sentence, use a YAML block scalar (`description: >`) rather than one giant single-line string.
-- Keep `description` at **1024 characters or less** (after YAML folding) and `name` at 64 or less, lowercase and hyphens. claude.ai rejects a skill ZIP that exceeds these limits.
+- Keep `description` at **1024 characters or less** (after YAML folding) and `name` at 64 or less, lowercase and hyphens. No `<` or `>` in either: write "meta tags", not `<meta>`. claude.ai rejects a skill ZIP
+  that breaks any of these rules.
 - Every `SKILL.md` must open with the three required frontmatter fields: `name`, `description`, `license`. `name` must match the folder name. A missing or thin `description` is a bug.
 - `license` in frontmatter is per skill (`CC0-1.0` for all skills) and independent of the repository's own `LICENSE` file (MIT, for the repo's own code/structure).
 - **Naming:** skills start with `edrys-`.

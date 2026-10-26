@@ -3,7 +3,7 @@ name: edrys-module
 description: >
   Use when writing, extending, reviewing or debugging an edrys-Lite module, a web page (HTML or one YAML
   file) loaded in an iframe of a classroom at https://edrys-labs.github.io: the edrys.js API (onReady,
-  sendMessage, onMessage, getState, Awareness, sendStream), <meta> declarations (show-in, module-config
+  sendMessage, onMessage, getState, Awareness, sendStream), meta tag declarations (show-in, module-config
   settings form), per-role configs, station modules that talk to hardware (Web Serial, camera, a local
   server), shared Yjs state, a consistent look, tests with edrys-module-tests, publishing on GitHub Pages.
   Example requests: "write an Edrys module that shows a sensor from the station", "why doesn't my module
