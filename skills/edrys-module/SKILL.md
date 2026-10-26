@@ -56,7 +56,8 @@ no server; every peer runs the module's code. Checked against edrys-Lite 3.1.0.
    module has one; add the link then, never a made-up URL.
 7. **Test with several peers** ([testing.md](reference/testing.md)): `node scripts/serve.mjs <folder>` and add
    `http://localhost:8080/` to a class at https://edrys-labs.github.io; a second window as a student; a late
-   joiner; a reload; the station. Automate with edrys-module-tests when the module is to be maintained.
+   joiner; a reload; the station. Automate with edrys-module-tests when the module is to be maintained. If the
+   `edrys` MCP server is connected, develop and test in its live class instead ([below](#in-a-live-class-edrys-dev)).
 8. **Deliver**: the files, a README ([publishing.md](reference/publishing.md)), the URL it will have, and an
    example lab entry for the edrys-lab skill.
 
@@ -71,6 +72,28 @@ scripts as an absolute path.
 | [examples/serial-bridge/](examples/serial-bridge/index.html) | a station module: Web Serial at the station, output and input as messages, status in state |
 
 All four are tested in a real edrys-Lite with several peers.
+
+## In a live class: edrys-dev
+
+If the `edrys` MCP server is connected (tools `get_state`, `goto`, `read_messages`, …), edrys-dev runs a class
+from a lab file in the user's browser and serves local modules. Otherwise skip this section.
+
+- Write the module in a subfolder of `get_state.modules.dir` and put `get_state.modules.url` + `<name>/` into
+  the lab file (`get_state.lab`), with a config that exercises it. No `serve.mjs` needed. Saving a file in the
+  folder reloads that module in the class tab, and reloads student and station tabs.
+- After a save of the lab, wait for the `lab` event. `module` events report a module that did not load
+  (`load: true`, e.g. no `<title>`) or a local module that threw (uncaught error, rejected promise,
+  `console.error`): fix it.
+- `read_messages {module}`: what it sent and received in the class tab's room (bodies decoded), and its errors.
+  `read_module_state {room}`: the room's shared state; check your keys are prefixed and hold what a late
+  joiner needs.
+- Test with several peers: `goto {as: "student"}` opens a student tab with its own identity,
+  `goto {as: "station"}` a station tab; `goto {room}` moves the class tab.
+- `run_in_module {module, code}` runs JavaScript in the module's frame, e.g. to read its DOM. Only when the user
+  asks or agrees: it acts in their browser.
+- The user talks to you in the chat panel over the class: answer `chat` events with the `chat` tool.
+- Still run `check-module.mjs`. Before the module is published and the lab shared, replace the local URLs
+  (`get_state.local_urls`) with the published ones.
 
 ## Mistakes that fail silently
 

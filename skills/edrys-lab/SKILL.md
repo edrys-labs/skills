@@ -49,7 +49,8 @@ is no server that stores it. Everything below is checked against edrys-Lite 3.1.
    `stationConfig`). Use `|` blocks for Markdown and code.
 5. **Validate.** `node scripts/validate-lab.mjs lab.yaml` fetches every module and checks the configs against
    its schema. Fix all errors; read every warning. Script paths are relative to this skill's folder; give the
-   lab file as an absolute path. Run `npm install --prefix scripts` once (Node 18+).
+   lab file as an absolute path. Run `npm install --prefix scripts` once (Node 18+). If the `edrys` MCP server
+   is connected, also check the lab in its live class ([below](#in-a-live-class-edrys-dev)).
 6. **Deliver.** The YAML, plus for a station lab the exact `docker run` line (from
    [stations.md](reference/stations.md)) and the steps: add the station computer's User ID as a teacher, open
    the station link. For a repository, follow [lab-repo.md](reference/lab-repo.md); the deploy link is
@@ -91,6 +92,24 @@ Runners (pyxtermjs, avr8js, micropython-simulator, micropython-webrepl) take cod
 subject: the editor's `runCommand` must equal the runner's `execute`, and both must be in the same room.
 
 For an unknown module URL: `node scripts/module-info.mjs <url> --entry` prints its schema and an entry to paste.
+
+## In a live class: edrys-dev
+
+If the `edrys` MCP server is connected (tools `get_state`, `goto`, `read_messages`, …), edrys-dev shows the lab
+in a class in the user's browser. Otherwise skip this section.
+
+- The lab file at `get_state.lab` is the class: edit it in place with your file tools, and the class tab
+  (`get_state.url`) republishes it. Never ask the user to reload or import it.
+- After each save, wait for the `lab` event; `ok: false` means the class could not take the file: fix it. Still
+  run `validate-lab.mjs`: the class accepts configs that a module ignores.
+- `get_state.class` shows the rooms, who is in which, and the modules; a module that did not load has `error`.
+- See it as others do: `goto {room}` moves the class tab; `goto {as: "student"}` opens a student tab with its own
+  identity, `goto {as: "station"}` a station tab (run by the owner, as in a real lab).
+- "Execute does nothing": `read_messages` shows the messages the class tab saw in its room (`goto` that room
+  first), so whether the editor sent its subject and the runner answered. `read_module_state {room}` shows what the modules share in a room.
+- The user talks to you in the chat panel over the class: answer `chat` events with the `chat` tool.
+- Don't deploy or publish unless asked. `get_state.local_urls` lists `localhost` module URLs, which work only on
+  this machine: replace them with the published URLs before the lab is shared.
 
 ## Mistakes that fail silently
 
