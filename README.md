@@ -19,6 +19,23 @@ Creates a ready-to-import classroom configuration (YAML) for edrys-Lite: chooses
 
 **Activates when:** a user wants to create, edit, or debug an edrys-Lite lab, classroom or remote lab ("build a remote Arduino lab", "make a deploy button for my lab", "Edrys-Labor erstellen"), or edits a classroom `.yaml`/`.json` meant for edrys-Lite.
 
+**Example prompts:**
+
+- *"Build a remote lab for an Arduino Uno: students write code in an editor, it is compiled and uploaded at the station, and they watch the board through a webcam."*
+- *"Make an Arduino lab without hardware for 30 students, each working on their own simulated board."*
+- *"Erstelle ein Edrys-Labor für einen Linux-Kurs mit einer gemeinsamen Shell und einer Aufgabenbeschreibung."*
+- *"Students in my lab press Execute and nothing happens. Here is my classroom file."*
+- *"Turn this lab into a GitHub repository with a deploy button."*
+
+**Tested example labs** in [skills/edrys-lab/examples/](skills/edrys-lab/examples/):
+
+| Example | Shows |
+|---------|-------|
+| [avr8js-simulation.yaml](skills/edrys-lab/examples/avr8js-simulation.yaml) | no station: editor and simulated Arduino, each student on their own |
+| [terminal.yaml](skills/edrys-lab/examples/terminal.yaml) | a shared Linux shell from a station |
+| [arduino.yaml](skills/edrys-lab/examples/arduino.yaml) | real Arduino: shared editor, camera, terminal that compiles and uploads |
+| [micropython-web-serial.yaml](skills/edrys-lab/examples/micropython-web-serial.yaml) | a board's REPL via Web Serial, no server at the station |
+
 ---
 
 ## edrys-module
@@ -26,6 +43,23 @@ Creates a ready-to-import classroom configuration (YAML) for edrys-Lite: chooses
 Guides the development of an edrys-Lite module, as an HTML page or a single YAML file: the `edrys.js` API, `<meta>` declarations and the `module-config` form schema, roles and stations, when to use messages, shared Yjs state or streams, a consistent look, end-to-end tests with [edrys-module-tests](https://github.com/edrys-labs/edrys-module-tests), and publishing via GitHub Pages.
 
 **Activates when:** a user wants to write, extend, or debug an edrys-Lite module ("write an Edrys module", "share a sensor from the station", "Modul für Edrys schreiben"), or works with `edrys.js`, `Edrys.onMessage`, `Edrys.getState` or `module-config`.
+
+**Example prompts:**
+
+- *"Write an Edrys module that shows the temperature a sensor at the station reports over serial."*
+- *"Make a module where the teacher asks a question and students vote; the teacher sees the results live."*
+- *"Schreibe ein Edrys-Modul, mit dem Studierende gemeinsam eine Checkliste abhaken."*
+- *"My module doesn't receive the messages the editor sends. Why?"*
+- *"Review my module before I publish it, and write tests for it with edrys-module-tests."*
+
+**Tested example modules** in [skills/edrys-module/examples/](skills/edrys-module/examples/):
+
+| Example | Shows |
+|---------|-------|
+| [minimal/](skills/edrys-module/examples/minimal/index.html) | the skeleton: meta tags, config per role, a message to the room |
+| [countdown/](skills/edrys-module/examples/countdown/module.yml) | a YAML module; a teacher-only control; state that late joiners see |
+| [shared-checklist/](skills/edrys-module/examples/shared-checklist/index.html) | shared Yjs state everyone edits, awareness ("viewing") |
+| [serial-bridge/](skills/edrys-module/examples/serial-bridge/index.html) | a station module: Web Serial at the station, input and output as messages |
 
 ---
 
@@ -94,6 +128,54 @@ cp -r skills/edrys-module .claude/skills/
 | GitHub Copilot | `~/.copilot/skills/` |
 | Claude Code    | `~/.claude/skills/`  |
 | Any agent      | `~/.agents/skills/`  |
+
+---
+
+### Claude.ai (web and desktop app)
+
+Skills can be uploaded to [claude.ai](https://claude.ai) as ZIP files, one per skill. Code execution must be enabled
+(Settings → Capabilities).
+
+1. Create the ZIPs, each with the skill folder at its top level:
+
+   ```bash
+   git clone https://github.com/edrys-labs/skills && cd skills/skills
+   zip -r edrys-lab.zip edrys-lab -x '*/node_modules/*'
+   zip -r edrys-module.zip edrys-module -x '*/node_modules/*'
+   ```
+
+2. Upload them under Settings → Capabilities → Skills, and switch them on.
+
+All guidance and examples work there. The helper scripts (validate a lab, check a module) run in Claude's sandbox
+only if its network access reaches the npm registry and `edrys-labs.github.io`; otherwise Claude checks the files
+by hand against the reference files. Steps that need your own computer (a local dev server, a station, browser
+tests) become instructions for you.
+
+### Which one to use
+
+| Task | claude.ai | Local agent (Claude Code, Copilot, Cursor, …) |
+|------|-----------|-----------------------------------------------|
+| Write a lab, choose and configure modules | ✓ | ✓ |
+| Validate a lab against the published modules | if the sandbox can reach them | ✓ |
+| Write a module | ✓ (as files to download) | ✓ (in your repository) |
+| Try a module in edrys-Lite from a local server | – | ✓ |
+| End-to-end tests with [edrys-module-tests](https://github.com/edrys-labs/edrys-module-tests) | – | ✓ |
+| Set up a station (Docker, serial ports, camera) | instructions only | ✓ |
+
+Teachers who build labs from existing modules can use either. For developing modules or setting up stations, use a
+local agent: testing with several peers, the dev server and the hardware all need your own machine.
+
+---
+
+## Limitations
+
+The skills give an AI agent knowledge and checks it would otherwise lack, but they don't guarantee a correct result.
+Agents still make mistakes, more often on complex tasks: labs with several stations or rooms, new hardware, modules
+with shared state or streams. Review what the agent produces and test it in edrys-Lite before you use it in a class:
+
+- load the lab or module in a real classroom, with a second browser as a student and, if needed, the station;
+- check that the hardware, ports and wiring match the configuration (the validators can't see them);
+- read code the agent wrote before running it at a station that controls real devices.
 
 ---
 
