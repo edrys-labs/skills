@@ -21,7 +21,7 @@ skills/<skill-name>/
 tests/
   activation.md        # prompts that must (or must not) load each skill; not installed
 .github/workflows/
-  release.yml          # runs check-skills on every push; on a v* tag, publishes one ZIP per skill
+  release.yml          # runs check-skills on every push; on a version tag, publishes one ZIP per skill
 tools/                 # maintainer scripts, not installed with the skills
   check-skills.mjs     # frontmatter rules claude.ai enforces (name, description length, no < >)
   build-catalog.mjs    # refreshes the GENERATED part of skills/edrys-lab/reference/module-catalog/
@@ -79,7 +79,7 @@ The repo/owner slug used throughout install examples is `edrys-labs/skills` — 
 ## Releasing
 
 `npx skills` installs from `main`, so a push is enough for those users. claude.ai users download the ZIPs of the
-latest GitHub release: push a tag (`git tag v1.1.0 && git push origin v1.1.0`) after changes worth shipping, and
+latest GitHub release: push a tag (`git tag 1.1.0 && git push origin 1.1.0`) after changes worth shipping, and
 the workflow checks the skills and publishes the release with one ZIP per skill.
 
 ## Domain context worth knowing
