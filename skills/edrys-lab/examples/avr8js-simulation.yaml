@@ -18,7 +18,7 @@ modules:
         3. Print `pressed` to the serial monitor whenever the button is pressed.
     showInCustom: lobby
     width: full
-    height: short
+    height: medium
 
   - url: https://edrys-labs.github.io/module-monaco-editor/
     config:

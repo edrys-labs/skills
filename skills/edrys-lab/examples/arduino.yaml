@@ -33,7 +33,7 @@ modules:
         `--device=/dev/ttyUSB0:/dev/ttyACM0`.
     showInCustom: lobby, station
     width: full
-    height: short
+    height: tall
 
   - url: https://edrys-labs.github.io/module-monaco-editor/
     config:

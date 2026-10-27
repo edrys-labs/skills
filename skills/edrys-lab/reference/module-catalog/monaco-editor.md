@@ -6,7 +6,7 @@
 - **Source:** https://github.com/edrys-labs/module-monaco-editor
 - **Default rooms (`show-in`):** `*`
 - **Description:** Collaborative code editor module for Edrys classrooms, built on Monaco Editor with real-time CRDT sync. For more information visit: https://github.com/edrys-labs/module-monaco-editor
-- **Schema read:** 2026-10-26
+- **Schema read:** 2026-10-27
 
 ### Config schema
 
@@ -26,7 +26,8 @@
 ### Entry skeleton
 
 Keys with a schema default are set; the others are commented out. Leave a key out unless you need it:
-the module may treat a missing key differently from an empty one.
+the module may treat a missing key differently from an empty one. Keep `width` and `height`, sized for
+this lab: without them the module is 250 × 200px (see [show-in-and-layout.md](../show-in-and-layout.md)).
 
 ```yaml
 - url: https://edrys-labs.github.io/module-monaco-editor/
@@ -40,6 +41,8 @@ the module may treat a missing key differently from an empty one.
     # readOnly: false  # boolean
     # showLanguageSelector: false  # boolean
   showInCustom: '*'
+  width: full
+  height: tall
 ```
 
 <!-- GENERATED:END -->

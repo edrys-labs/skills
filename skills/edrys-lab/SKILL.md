@@ -123,7 +123,8 @@ None of these shows an error in edrys-Lite; the lab just does not work.
 | `synchronize` left out | editors, simulators and whiteboards are private per person | set it explicitly |
 | `teacher-only` / `station-only` without a room entry | module never appears | `*, teacher-only`, `station, station-only` |
 | `Teacher-only` (capitalized) | treated as a room name; everybody sees the module | lowercase flags |
-| Typo in `width` / `height` | tiny 250 × 200 px module | `full`/`half`/`third`, `huge`/`tall`/`medium`/`short`, or a number |
+| `width` / `height` left out, or a typo | tiny 250 × 200 px module | set both on every module: `full`/`half`/`third`, `huge`/`tall`/`medium`/`short`, or a number |
+| Markdown text in a `medium` or `short` module | a module never grows with its content: the rest scrolls inside its frame and is easily missed | `height: huge` for a task description, `tall` for a few lines |
 | `content: >` for Markdown or code | lines joined, lists and code blocks broken | `content: \|` |
 | A config written as a non-JSON string | module gets a string and ignores it | YAML map |
 | Two editors in one room without `editorId` | both show the same document | distinct `editorId` |

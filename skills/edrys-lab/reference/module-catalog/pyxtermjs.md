@@ -6,7 +6,7 @@
 - **Source:** https://github.com/edrys-labs/module-pyxtermjs
 - **Default rooms (`show-in`):** `station`
 - **Description:** This is a terminal-server based on https://github.com/cs01/pyxtermjs. A server should be started locally and shared in station mode. For more information and configuration options, see https://github.com/edrys-labs/module-pyxtermjs
-- **Schema read:** 2026-10-26
+- **Schema read:** 2026-10-27
 
 ### Config schema
 
@@ -27,7 +27,8 @@
 ### Entry skeleton
 
 Keys with a schema default are set; the others are commented out. Leave a key out unless you need it:
-the module may treat a missing key differently from an empty one.
+the module may treat a missing key differently from an empty one. Keep `width` and `height`, sized for
+this lab: without them the module is 250 × 200px (see [show-in-and-layout.md](../show-in-and-layout.md)).
 
 ```yaml
 - url: https://edrys-labs.github.io/module-pyxtermjs/index.html
@@ -42,6 +43,8 @@ the module may treat a missing key differently from an empty one.
     # script: ''  # code-area
     # enable: {student: false, teacher: false}  # checkboxes: student | teacher
   showInCustom: station
+  width: full
+  height: tall
 ```
 
 <!-- GENERATED:END -->

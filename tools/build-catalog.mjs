@@ -66,10 +66,11 @@ function generated(entry, info) {
       '### Entry skeleton',
       '',
       'Keys with a schema default are set; the others are commented out. Leave a key out unless you need it:',
-      'the module may treat a missing key differently from an empty one.',
+      'the module may treat a missing key differently from an empty one. Keep `width` and `height`, sized for',
+      'this lab: without them the module is 250 × 200px (see [show-in-and-layout.md](../show-in-and-layout.md)).',
       '',
       '```yaml',
-      entryYaml(entry.url, info),
+      entryYaml(entry.url, info, { width: 'full', height: 'tall' }),
       '```',
       ''
     )

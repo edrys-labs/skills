@@ -106,6 +106,27 @@ const WIDTHS = ['full', 'half', 'third']
 const HEIGHTS = ['huge', 'tall', 'medium', 'short']
 const FLAGS = ['teacher-only', 'station-only']
 
+// edrys-Lite's heights (Modules.vue); a module never grows with its content
+const HEIGHT_PX = { huge: 830, tall: 720, medium: 410, short: 200 }
+// a rendered Markdown line, blank ones included, and the frame's padding: a rough
+// estimate, so only text clearly too long for its module is reported
+const LINE_PX = 24
+const PADDING_PX = 40
+
+// Markdown-IT shows config.content, then the content of the viewer's own role config.
+function textFit(m) {
+  if (!/\/module-markdown-it\//.test(m.url)) return
+  const height = typeof m.height === 'number' ? m.height : HEIGHT_PX[m.height] ?? 200
+  const lines = (config) => (typeof config?.content === 'string' ? config.content.trimEnd().split('\n').length : 0)
+  const shared = lines(m.config)
+  const [role, count] = [['everyone', shared], ...['studentConfig', 'teacherConfig', 'stationConfig'].map((r) => [r, shared + lines(m[r])])]
+    .reduce((a, b) => (b[1] > a[1] ? b : a))
+  const needed = count * LINE_PX + PADDING_PX
+  if (needed <= height) return
+  const fits = Object.entries(HEIGHT_PX).filter(([, px]) => px >= needed).map(([name]) => name).reverse()[0]
+  return `about ${count} lines of text (${role === 'everyone' ? 'config' : `config + ${role}`}) need ~${needed}px, the module is ${height}px and does not grow; the rest scrolls inside it. Use ${fits ? `height: ${fits}` : 'a larger number, or split the text'}`
+}
+
 function checkShowIn(where, value) {
   if (Array.isArray(value)) {
     error(where, 'must be a comma-separated string, not a list (edrys-Lite cannot read a list here)')
@@ -171,12 +192,16 @@ if (!Array.isArray(lab.modules)) {
     }
     if (m.id !== undefined && typeof m.id !== 'string') warn(`${label}.id`, 'should be a string; leave it out and edrys-Lite generates one')
 
-    if (m.width !== undefined && !WIDTHS.includes(m.width) && typeof m.width !== 'number') {
+    if (m.width === undefined) warn(`${label}.width`, `missing: the module is 250px wide; set ${WIDTHS.join(', ')} or a number of pixels`)
+    else if (!WIDTHS.includes(m.width) && typeof m.width !== 'number') {
       warn(`${label}.width`, `"${m.width}" is not ${WIDTHS.join(', ')} or a number of pixels; the module gets the smallest size`)
     }
-    if (m.height !== undefined && !HEIGHTS.includes(m.height) && typeof m.height !== 'number') {
+    if (m.height === undefined) warn(`${label}.height`, `missing: the module is 200px high; set ${HEIGHTS.join(', ')} or a number of pixels`)
+    else if (!HEIGHTS.includes(m.height) && typeof m.height !== 'number') {
       warn(`${label}.height`, `"${m.height}" is not ${HEIGHTS.join(', ')} or a number of pixels; the module gets the smallest size`)
     }
+    const fit = textFit(m)
+    if (fit) warn(`${label}.height`, fit)
 
     for (const type of CONFIG_TYPES) {
       const value = m[type]

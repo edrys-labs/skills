@@ -6,7 +6,7 @@
 - **Source:** https://github.com/edrys-labs/module-avr8js
 - **Default rooms (`show-in`):** `*`
 - **Description:** This is an Arduino simulator module for Edrys based on https://github.com/wokwi/avr8js. It must be connected with an additional editor module, such as https://github.com/edrys-labs/module-monaco-editor or https://github.com/edrys-labs/module-blockly-duino-v2. Uploads must be sent with the subject `execute`. For more information and configuration options, see https://github.com/edrys-labs/module-avr8js
-- **Schema read:** 2026-10-26
+- **Schema read:** 2026-10-27
 
 ### Config schema
 
@@ -21,7 +21,8 @@
 ### Entry skeleton
 
 Keys with a schema default are set; the others are commented out. Leave a key out unless you need it:
-the module may treat a missing key differently from an empty one.
+the module may treat a missing key differently from an empty one. Keep `width` and `height`, sized for
+this lab: without them the module is 250 × 200px (see [show-in-and-layout.md](../show-in-and-layout.md)).
 
 ```yaml
 - url: https://edrys-labs.github.io/module-avr8js/index.html
@@ -30,6 +31,8 @@ the module may treat a missing key differently from an empty one.
     # modules: ''  # code-area
     # synchronize: false  # boolean
   showInCustom: '*'
+  width: full
+  height: tall
 ```
 
 <!-- GENERATED:END -->

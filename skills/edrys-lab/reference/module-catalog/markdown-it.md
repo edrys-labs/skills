@@ -7,7 +7,7 @@
 - **Default rooms (`show-in`):** `*`
 - **Inlined** (data: URL): runs with an opaque origin
 - **Description:** Write Markdown as task-descriptions for your students, this markdown interpreter additionally allows to integrate formulas, ASCII-art and videos. For more information, see https://github.com/edrys-labs/module-markdown-it
-- **Schema read:** 2026-10-26
+- **Schema read:** 2026-10-27
 
 ### Config schema
 
@@ -38,7 +38,8 @@
 ### Entry skeleton
 
 Keys with a schema default are set; the others are commented out. Leave a key out unless you need it:
-the module may treat a missing key differently from an empty one.
+the module may treat a missing key differently from an empty one. Keep `width` and `height`, sized for
+this lab: without them the module is 250 × 200px (see [show-in-and-layout.md](../show-in-and-layout.md)).
 
 ```yaml
 - url: https://edrys-labs.github.io/module-markdown-it/index.html
@@ -51,6 +52,8 @@ the module may treat a missing key differently from an empty one.
   stationConfig:
     # content: ''  # code-area
   showInCustom: '*'
+  width: full
+  height: tall
 ```
 
 <!-- GENERATED:END -->
@@ -100,6 +103,8 @@ own role config (`studentConfig`, `teacherConfig`, `stationConfig`). Empty ones 
 **Pitfalls:**
 
 - Use `content: |`, never `content: >`: folded blocks join lines and break lists, code blocks and diagrams.
+- The module does not grow with its text; what does not fit scrolls inside it. A task description needs
+  `height: huge`, a few lines `tall`. Count the longest role: teachers see `config` plus `teacherConfig`.
 - `teacherConfig` hides text in the interface only; students can read it with the browser's developer tools.
   Don't put solutions there that must stay secret.
 - PlantUML, DOT and ditaa diagrams are rendered by the public plantuml.com server, which receives the diagram

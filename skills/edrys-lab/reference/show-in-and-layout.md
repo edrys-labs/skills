@@ -76,10 +76,16 @@ Use exactly the values the settings form saves:
 | `short` | Short | 200px |
 | number, e.g. `500` | Custom | that many pixels |
 
-Any other value falls back to the smallest size (250 × 200px), so a typo shows up as a tiny module.
+A missing value, or any other one, falls back to the smallest size (250 × 200px), so a left-out or
+misspelled key shows up as a tiny module. Set both on every module.
+
+A module never grows with its content: what does not fit scrolls inside its frame, and students easily miss it.
+Size it for the longest text any role sees (role configs are added to `config`, see the module's catalog file).
 
 Rules of thumb:
 
-- Text, editors, terminals: `width: full`, `height: huge` or `tall`.
+- Text, editors, terminals: `width: full`, `height: huge` or `tall`. A heading, a paragraph and a short list
+  already fill `medium` (410px), so a task description gets `huge`, a few lines `tall`.
+- `medium` / `short` only for a line or two of text, or a tool that is small by nature.
 - Two tools side by side (editor + terminal, terminal + camera): `width: half` for both.
 - Small status or control modules: `third` / `short`.

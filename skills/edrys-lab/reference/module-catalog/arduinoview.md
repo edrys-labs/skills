@@ -6,7 +6,7 @@
 - **Source:** https://github.com/edrys-labs/module-arduinoview
 - **Default rooms (`show-in`):** `station`
 - **Description:** Host websites on an Arduino and use them from every browser in the room. The station connects the Arduino via Web Serial (Chrome, Edge or Firefox 151+). For more information and configuration, see: https://github.com/edrys-labs/module-arduinoview
-- **Schema read:** 2026-10-26
+- **Schema read:** 2026-10-27
 
 ### Config schema
 
@@ -20,7 +20,8 @@
 ### Entry skeleton
 
 Keys with a schema default are set; the others are commented out. Leave a key out unless you need it:
-the module may treat a missing key differently from an empty one.
+the module may treat a missing key differently from an empty one. Keep `width` and `height`, sized for
+this lab: without them the module is 250 × 200px (see [show-in-and-layout.md](../show-in-and-layout.md)).
 
 ```yaml
 - url: https://edrys-labs.github.io/module-arduinoview/index.html
@@ -28,6 +29,8 @@ the module may treat a missing key differently from an empty one.
     # baudrate: ''  # select: 110 | 300 | 1200 | 2400 | 4800 | 9600 | 19200 | 38400 | 57600 | 115200
     # autoconnect: false  # boolean
   showInCustom: station
+  width: full
+  height: tall
 ```
 
 <!-- GENERATED:END -->

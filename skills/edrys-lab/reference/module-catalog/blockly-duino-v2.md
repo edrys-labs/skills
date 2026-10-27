@@ -6,7 +6,7 @@
 - **Source:** https://github.com/edrys-labs/module-blockly-duino-v2
 - **Default rooms (`show-in`):** `*`
 - **Description:** Program https://www.arduino.cc boards with blocks, together: everyone in a room edits one program, and the run button sends the generated code to the station. Configuration options: https://github.com/edrys-labs/module-blockly-duino-v2
-- **Schema read:** 2026-10-26
+- **Schema read:** 2026-10-27
 
 ### Config schema
 
@@ -21,7 +21,8 @@
 ### Entry skeleton
 
 Keys with a schema default are set; the others are commented out. Leave a key out unless you need it:
-the module may treat a missing key differently from an empty one.
+the module may treat a missing key differently from an empty one. Keep `width` and `height`, sized for
+this lab: without them the module is 250 × 200px (see [show-in-and-layout.md](../show-in-and-layout.md)).
 
 ```yaml
 - url: https://edrys-labs.github.io/module-blockly-duino-v2/index.html
@@ -30,6 +31,8 @@ the module may treat a missing key differently from an empty one.
     # board: ''  # select: arduino_uno | arduino_nano | arduino_mini | arduino_pro8 | arduino_pro16 | lilypad | arduino_mega | arduino_leonardo | arduino_micro | arduino_yun
     # runCommand: ''  # string
   showInCustom: '*'
+  width: full
+  height: tall
 ```
 
 <!-- GENERATED:END -->

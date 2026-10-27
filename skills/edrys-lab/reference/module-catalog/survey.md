@@ -6,7 +6,7 @@
 - **Source:** https://github.com/edrys-labs/module-survey
 - **Default rooms (`show-in`):** `station`
 - **Description:** A SurveyJS survey for station rooms: everyone in the room can answer, the station stores the answers and charts them. https://github.com/edrys-labs/module-survey
-- **Schema read:** 2026-10-26
+- **Schema read:** 2026-10-27
 
 ### Config schema
 
@@ -20,7 +20,8 @@
 ### Entry skeleton
 
 Keys with a schema default are set; the others are commented out. Leave a key out unless you need it:
-the module may treat a missing key differently from an empty one.
+the module may treat a missing key differently from an empty one. Keep `width` and `height`, sized for
+this lab: without them the module is 250 × 200px (see [show-in-and-layout.md](../show-in-and-layout.md)).
 
 ```yaml
 - url: https://edrys-labs.github.io/module-survey/index.html
@@ -28,6 +29,8 @@ the module may treat a missing key differently from an empty one.
     # survey: ''  # code-area
     # allowRetake: false  # boolean
   showInCustom: station
+  width: full
+  height: tall
 ```
 
 <!-- GENERATED:END -->

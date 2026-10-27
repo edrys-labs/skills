@@ -6,7 +6,7 @@
 - **Source:** https://github.com/edrys-labs/module-liascript
 - **Default rooms (`show-in`):** `*`
 - **Description:** Interactive LiaScript courses (quizzes, surveys, code, animations) from a course URL or Markdown, optionally synced within a room. For more information see https://github.com/edrys-labs/module-liascript
-- **Schema read:** 2026-10-26
+- **Schema read:** 2026-10-27
 
 ### Config schema
 
@@ -22,7 +22,8 @@
 ### Entry skeleton
 
 Keys with a schema default are set; the others are commented out. Leave a key out unless you need it:
-the module may treat a missing key differently from an empty one.
+the module may treat a missing key differently from an empty one. Keep `width` and `height`, sized for
+this lab: without them the module is 250 × 200px (see [show-in-and-layout.md](../show-in-and-layout.md)).
 
 ```yaml
 - url: https://edrys-labs.github.io/module-liascript/index.html
@@ -32,6 +33,8 @@ the module may treat a missing key differently from an empty one.
     # classroom: false  # boolean
     # player: ''  # text
   showInCustom: '*'
+  width: full
+  height: tall
 ```
 
 <!-- GENERATED:END -->
