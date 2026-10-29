@@ -114,6 +114,9 @@ in a class in the user's browser. Otherwise skip this section.
   this machine: replace them with the published URLs before the lab is shared.
 - Students on other computers join through `get_state.student_link` (the class on the hosted edrys-Lite), not
   `share`, which opens on this machine. It is null with `--local`. The user's `/?dev` tab stays open meanwhile.
+- With `--tutor`, students ask a separate tutor agent (no tools) in the class. `read_student_chats` shows what they
+  asked: find where they get stuck and improve the lab, or the tutor's notes in `tutor.md` next to the lab (not
+  sent to students, but the tutor may repeat them: no secrets).
 
 ## Mistakes that fail silently
 
