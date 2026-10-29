@@ -112,6 +112,8 @@ in a class in the user's browser. Otherwise skip this section.
 - The user talks to you in the chat panel over the class: answer `chat` events with the `chat` tool.
 - Don't deploy or publish unless asked. `get_state.local_urls` lists `localhost` module URLs, which work only on
   this machine: replace them with the published URLs before the lab is shared.
+- Students on other computers join through `get_state.student_link` (the class on the hosted edrys-Lite), not
+  `share`, which opens on this machine. It is null with `--local`. The user's `/?dev` tab stays open meanwhile.
 
 ## Mistakes that fail silently
 
