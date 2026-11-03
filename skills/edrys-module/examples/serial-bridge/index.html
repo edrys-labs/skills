@@ -22,6 +22,8 @@
     <script src="https://edrys-labs.github.io/module/edrys.js"></script>
     <link rel="stylesheet" href="https://edrys-labs.github.io/module/vendor/water.min.css" />
     <link rel="stylesheet" href="https://edrys-labs.github.io/module/vendor/open-iconic/css/open-iconic.min.css" />
+    <!-- the classroom's light or dark theme, fonts, toolbar/pill/footer; after water.css -->
+    <link rel="stylesheet" href="https://edrys-labs.github.io/module/edrys-module.css" />
 
     <style>
       /* author `display` rules would otherwise override the hidden attribute */
@@ -32,91 +34,42 @@
       body {
         height: 100%;
       }
+      /* toolbar, terminal, footer; no title, the frame shows the module's name */
       body {
         margin: 0;
-        padding: 0.5rem 0.75rem;
+        padding: 0;
         max-width: none;
         display: flex;
         flex-direction: column;
-        box-sizing: border-box;
       }
-      .header {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 0.5rem 1rem;
-        margin-bottom: 0.5rem;
-      }
-      .title {
-        font-size: 1.4em;
-        line-height: 1;
-        margin: 0;
-      }
-      .status {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-      .badge {
-        padding: 0.1rem 0.6rem;
-        border-radius: 999px;
-        color: #fff;
-        font-size: small;
-        background: #6b6b6b;
-      }
-      .badge.on {
-        background: #1f7a45;
-      }
-      .badge.off {
-        background: #b8384a;
-      }
-      .controls {
-        margin-left: auto;
-        display: flex;
-        gap: 0.5rem;
-        font-size: small;
-      }
-      .controls button {
-        margin: 0;
-      }
+      /* dark in both themes (.edrys-terminal) */
       #output {
         flex: 1;
         min-height: 4rem;
         overflow: auto;
-        margin: 0 0 0.5rem;
+        margin: 10px 12px 12px;
         white-space: pre-wrap;
       }
-      form {
-        display: flex;
-        gap: 0.5rem;
-        margin: 0;
-      }
-      form input {
+      #send input {
         flex: 1;
-        margin: 0;
-      }
-      form button {
-        margin: 0;
       }
     </style>
   </head>
 
   <body>
-    <header class="header">
-      <h1 class="title">Serial</h1>
-      <div class="status"><span id="badge" class="badge wait">loading&hellip;</span></div>
-      <div class="controls" id="station-controls" hidden>
-        <button id="connect">
-          <span class="oi" data-glyph="link-intact" aria-hidden="true"></span> Connect
-        </button>
-      </div>
+    <header class="edrys-toolbar">
+      <span id="badge" class="edrys-pill" role="status">Loading&hellip;</span>
+      <span class="edrys-spacer"></span>
+      <button id="connect" hidden>
+        <span class="oi" data-glyph="link-intact" aria-hidden="true"></span> Connect
+      </button>
     </header>
 
-    <pre id="output" aria-live="polite"></pre>
+    <pre id="output" class="edrys-terminal" aria-live="polite"></pre>
 
-    <form id="send">
+    <form id="send" class="edrys-footer">
       <input id="line" type="text" placeholder="Line to send to the device" aria-label="Line to send" autocomplete="off" />
-      <button type="submit"><span class="oi" data-glyph="arrow-thick-right" aria-hidden="true"></span> Send</button>
+      <button type="submit" class="primary"><span class="oi" data-glyph="arrow-thick-right" aria-hidden="true"></span> Send</button>
     </form>
 
     <script>
@@ -128,7 +81,9 @@
       const DEFAULT_BAUD = 9600
       const MAX_OUTPUT = 20000
 
-      const STATUS_TEXT = { on: 'connected', off: 'not connected', wait: 'connecting…' }
+      const STATUS_TEXT = { on: 'Connected', off: 'Not connected', wait: 'Connecting…' }
+      // status -> pill colour; not connected stays neutral
+      const PILL = { on: 'ok', off: '', wait: 'warn' }
 
       let port = null
       let writer = null
@@ -152,7 +107,7 @@
       function renderStatus() {
         const state = Edrys.getState(STATUS, 'Value') || 'off'
         const badge = document.getElementById('badge')
-        badge.className = 'badge ' + state
+        badge.className = ('edrys-pill ' + (PILL[state] || '')).trim()
         badge.textContent = STATUS_TEXT[state] || state
       }
 
@@ -210,7 +165,7 @@
       }
 
       async function startStation() {
-        document.getElementById('station-controls').hidden = false
+        document.getElementById('connect').hidden = false
         // After a reload the port is closed, whatever the state says
         setStatus('off')
 

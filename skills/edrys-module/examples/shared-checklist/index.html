@@ -23,38 +23,35 @@
     <script src="https://edrys-labs.github.io/module/edrys.js"></script>
     <link rel="stylesheet" href="https://edrys-labs.github.io/module/vendor/water.min.css" />
     <link rel="stylesheet" href="https://edrys-labs.github.io/module/vendor/open-iconic/css/open-iconic.min.css" />
+    <!-- the classroom's light or dark theme, fonts, toolbar/pill/footer; after water.css -->
+    <link rel="stylesheet" href="https://edrys-labs.github.io/module/edrys-module.css" />
 
     <style>
       /* author `display` rules would otherwise override the hidden attribute */
       [hidden] {
         display: none !important;
       }
+      html,
+      body {
+        height: 100%;
+      }
+      /* toolbar, content, footer; no title, the frame shows the module's name */
       body {
         margin: 0;
-        padding: 0.5rem 0.75rem;
+        padding: 0;
         max-width: none;
-      }
-      .header {
         display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 0.5rem 1rem;
-        margin-bottom: 0.5rem;
+        flex-direction: column;
       }
-      .title {
-        font-size: 1.4em;
-        line-height: 1;
-        margin: 0;
+      main {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        padding: 16px 18px;
       }
-      .controls {
-        margin-left: auto;
-        font-size: small;
-      }
-      .controls button {
-        margin: 0;
-      }
-      .muted {
-        opacity: 0.7;
+      .muted,
+      .loading {
+        color: var(--edrys-muted);
       }
       /* replaced once Edrys is ready; appears only after 0.5s, so fast loads don't flicker */
       .loading {
@@ -63,7 +60,7 @@
       }
       @keyframes show-loading {
         to {
-          opacity: 0.6;
+          opacity: 1;
         }
       }
       #items {
@@ -77,27 +74,27 @@
         display: inline;
       }
       #items .by {
-        font-size: small;
-        opacity: 0.7;
-        margin-left: 0.5rem;
+        font-size: 12px;
+        color: var(--edrys-muted);
+        margin-left: 8px;
       }
     </style>
   </head>
 
   <body>
-    <header class="header">
-      <h1 class="title">Checklist</h1>
-      <span id="progress" class="muted"></span>
-      <div class="controls">
-        <button id="reset" hidden>
-          <span class="oi" data-glyph="reload" aria-hidden="true"></span> Reset
-        </button>
-      </div>
+    <header class="edrys-toolbar">
+      <span id="progress" class="edrys-pill" role="status">Loading&hellip;</span>
+      <span class="edrys-spacer"></span>
+      <button id="reset" hidden>
+        <span class="oi" data-glyph="reload" aria-hidden="true"></span> Reset
+      </button>
     </header>
 
-    <p id="message" class="loading">Loading&hellip;</p>
-    <ul id="items"></ul>
-    <p id="viewers" class="muted"></p>
+    <main>
+      <p id="message" class="loading">Loading&hellip;</p>
+      <ul id="items"></ul>
+      <p id="viewers" class="muted"></p>
+    </main>
 
     <script>
       // done: a Y.Map item text -> { by, at }, shared by everyone in the room.
@@ -168,7 +165,9 @@
           rows[i].querySelector('.by').textContent = entry ? '✓ ' + entry.by : ''
         })
         const count = items.filter((item) => done.has(item)).length
-        document.getElementById('progress').textContent = `${count} / ${items.length} done`
+        const progress = document.getElementById('progress')
+        progress.textContent = `${count} / ${items.length} done`
+        progress.className = count && count === items.length ? 'edrys-pill ok' : 'edrys-pill'
       }
 
       function renderViewers() {

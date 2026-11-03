@@ -47,11 +47,26 @@ All set before `onReady` runs. Treat them as read-only.
 | `Edrys.liveUser` | `liveClass.users[Edrys.username]`: `{ name, displayName, role, room, dateJoined, handRaised, connections }`. Can be `undefined` for a moment; use `?.`. |
 | `Edrys.liveRoom` | the shared state of the current room as a plain object (no name; the name is `liveUser.room`) |
 | `Edrys.liveClass` | `{ users, rooms }`: every present peer by username (all rooms), and every room's state as plain JSON |
+| `Edrys.theme` | `"light"` or `"dark"`, the classroom's theme (since edrys-Lite 3.2.0; `undefined` before the first update and in older versions) |
 | `Edrys.debug` | set `true` to log edrys.js internals to the console |
 
 `Edrys.liveClass`, `liveRoom` and `liveUser` are **read-only snapshots**, rebuilt on every update. Writing to
 them changes at most this peer's copy until the next update; nobody else sees it. Change shared data with
 `getState`.
+
+### Theme
+
+Since edrys-Lite 3.2.0 the classroom sends its light or dark theme with every update. edrys.js sets
+`Edrys.theme` and `<html data-theme="light|dark">` (which `edrys-module.css` follows), and calls the
+`Edrys.onTheme(fn)` handlers with the new theme whenever it changes, the first time with the first update
+(~500 ms, before `onReady`). `onTheme` returns a function that removes the handler.
+
+- Only code that colours things in JavaScript (editor and terminal themes, charts, canvases) needs `onTheme`;
+  CSS on the `--edrys-*` variables switches by itself ([design-baseline.md](design-baseline.md#theme)).
+- Call it as `Edrys.onTheme?.(fn)`: an older edrys.js has no `onTheme`, and a throw at the top level of the
+  script stops the module before its `onReady`.
+- Without a theme from edrys-Lite (older version, the page opened on its own) there is no `data-theme`; fall
+  back to `matchMedia('(prefers-color-scheme: dark)')`.
 
 ### Configs
 

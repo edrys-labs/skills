@@ -17,7 +17,8 @@ license: CC0-1.0
 
 A module is a web page that edrys-Lite loads in an iframe, once per peer, and configures per lab entry. It
 talks to the classroom through `edrys.js`: messages to the room, shared Yjs state per room, streams. There is
-no server; every peer runs the module's code. Checked against edrys-Lite 3.1.0.
+no server; every peer runs the module's code. Checked against edrys-Lite 3.1.0; the theme parts
+(`edrys-module.css`, `Edrys.theme`, `Edrys.onTheme`) need 3.2.0.
 
 | Topic | File |
 |-------|------|
@@ -25,7 +26,7 @@ no server; every peer runs the module's code. Checked against edrys-Lite 3.1.0.
 | `<meta>` tags, YAML modules, `fetch`, the `module-config` form schema | [reference/declaration.md](reference/declaration.md) |
 | Choosing messages vs state vs awareness vs streams; patterns and pitfalls | [reference/state-messaging-streams.md](reference/state-messaging-streams.md) |
 | Roles, station modules, hardware and local servers | [reference/roles-and-stations.md](reference/roles-and-stations.md) |
-| The shared look (water.css, header row, states) | [reference/design-baseline.md](reference/design-baseline.md) |
+| The shared look (water.css + edrys-module.css, light/dark theme, toolbar, pill, footer, states) | [reference/design-baseline.md](reference/design-baseline.md) |
 | Review checklist | [reference/checklist.md](reference/checklist.md) |
 | Dev loop, manual tests, edrys-module-tests | [reference/testing.md](reference/testing.md) |
 | Hosting, README, built modules, station software | [reference/publishing.md](reference/publishing.md) |
@@ -43,8 +44,8 @@ no server; every peer runs the module's code. Checked against edrys-Lite 3.1.0.
 2. **Check it is needed.** If an existing module does the job (the edrys-lab skill's catalog), configure that
    instead. Embedding an existing web tool in the iframe module may be enough.
 3. **Start from the closest example** (below), not a blank file. Keep its skeleton: `<title>`, meta tags,
-   edrys.js from `https://edrys-labs.github.io/module/edrys.js`, water.css, `[hidden]` rule, loading state,
-   init in `Edrys.onReady`.
+   edrys.js from `https://edrys-labs.github.io/module/edrys.js`, water.css then edrys-module.css, `[hidden]`
+   rule, toolbar with a status pill (no title: the frame shows the name), loading state, init in `Edrys.onReady`.
 4. **Design the contract first**: config fields with defaults and hints, message subjects (prefixed, as
    constants), state keys (prefixed), who writes what. Use [state-messaging-streams.md](reference/state-messaging-streams.md)
    to choose.
@@ -116,6 +117,9 @@ None of these shows an error in edrys-Lite; the module just doesn't work.
 | YAML module: `module-config` as a map, or `show-in` as a string | no settings form / module fails to load | `module-config: \|` string; `show-in: ['*']` |
 | YAML or `fetch` module with `…`, `ü`, `✓` | shown as `%u2026` | `&hellip;` in HTML, `\u2026` in JS |
 | YAML or `fetch` module with `localStorage` / `Edrys.setItem` / relative URLs | throws / 404 | HTML module, or absolute URLs and no storage |
+| `Edrys.onTheme(fn)` without `?.` at the top level | in an older edrys-Lite the script throws, the module never gets ready | `Edrys.onTheme?.(fn)` |
+| Hex colours in module CSS, or editor/terminal colours set once | unreadable in the dark theme, or stuck in the theme it loaded with | `--edrys-*` variables; re-apply widget themes on `onTheme` |
+| edrys-module.css linked before water.css | colours follow the theme, but fonts, buttons and fields keep water's look | link it after water.css |
 | `display: flex` on an element with `hidden` | role-only controls visible to everyone | `[hidden] { display: none !important; }` |
 | Served without CORS (`python -m http.server`) | module shows as an error | `scripts/serve.mjs`, GitHub Pages |
 | HTML module linked as `raw.githubusercontent.com` | iframe shows the source | GitHub Pages |

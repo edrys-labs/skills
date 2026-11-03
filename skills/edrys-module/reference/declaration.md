@@ -103,7 +103,9 @@ edrys-Lite builds one page from it: `load.links`, then `load.scripts`, then `sty
 - Use absolute `https://` URLs in `load`. Those become normal `<script src>` tags and load in order before
   `main`. A relative URL is fetched and injected later, asynchronously: `main` runs before it, and order is not
   kept.
-- `load.links` has no `media` attribute; add theme-dependent stylesheets from `main`.
+- `load.links` has no `media` attribute; add theme-dependent stylesheets (a light and a dark code theme) from
+  `main` and switch their `media` ([design-baseline.md](design-baseline.md#theme)). List edrys-module.css
+  after water.css.
 - A `|` block keeps line breaks; `>` joins them and breaks code.
 
 ## Inlined HTML (`fetch`)

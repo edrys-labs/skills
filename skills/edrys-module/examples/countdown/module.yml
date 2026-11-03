@@ -15,6 +15,8 @@ load:
   links:
     - https://edrys-labs.github.io/module/vendor/water.min.css
     - https://edrys-labs.github.io/module/vendor/open-iconic/css/open-iconic.min.css
+    # the classroom's light or dark theme, fonts, toolbar/pill/footer; after water.css
+    - https://edrys-labs.github.io/module/edrys-module.css
 
 # A string, not a YAML map: the settings form only reads a string here
 module-config: |
@@ -29,21 +31,27 @@ style: |
   [hidden] { display: none !important; }
   /* replaced once Edrys is ready; appears only after 0.5s, so fast loads don't flicker */
   .loading { opacity: 0; animation: show-loading 0s 0.5s forwards; }
-  @keyframes show-loading { to { opacity: 0.6; } }
-  body { margin: 0; padding: 0.5rem 0.75rem; max-width: none; text-align: center; }
-  #time { font-size: 3em; font-family: monospace; margin: 0.5rem 0; }
-  #time.over { color: #b8384a; }
-  .muted { opacity: 0.7; }
-  .controls { display: flex; justify-content: center; gap: 0.5rem; }
-  .controls button { margin: 0; }
+  @keyframes show-loading { to { opacity: 1; } }
+  /* toolbar, content, footer; no title, the frame shows the module's name */
+  html, body { height: 100%; }
+  body { margin: 0; padding: 0; max-width: none; display: flex; flex-direction: column; }
+  main { flex: 1; min-height: 0; overflow: auto; padding: 16px 18px; text-align: center; }
+  #time { font: 600 3em var(--edrys-mono); color: var(--edrys-heading); margin: 8px 0; }
+  #time.over { color: var(--edrys-error); }
+  .muted, .loading { color: var(--edrys-muted); }
 
 body: |
-  <p id="time" class="loading" aria-live="polite">Loading&hellip;</p>
-  <p id="status" class="muted"></p>
-  <div class="controls" id="controls" hidden>
-    <button id="start"><span class="oi" data-glyph="media-play" aria-hidden="true"></span> Start</button>
+  <header class="edrys-toolbar">
+    <span id="status" class="edrys-pill" role="status">Loading&hellip;</span>
+  </header>
+  <main>
+    <p id="time" class="loading" aria-live="polite">Loading&hellip;</p>
+    <p id="hint" class="muted"></p>
+  </main>
+  <footer class="edrys-footer" id="controls" hidden>
+    <button id="start" class="primary"><span class="oi" data-glyph="media-play" aria-hidden="true"></span> Start</button>
     <button id="reset"><span class="oi" data-glyph="media-stop" aria-hidden="true"></span> Reset</button>
-  </div>
+  </footer>
 
 main: |
   // main runs in <head>, before the body exists: touch the DOM only in onReady.
@@ -73,18 +81,23 @@ main: |
   function render() {
     const time = document.getElementById('time')
     const status = document.getElementById('status')
+    const hint = document.getElementById('hint')
     time.classList.remove('loading')
     const target = end()
     if (!target) {
       time.textContent = '--:--'
       time.classList.remove('over')
-      status.textContent = Edrys.role === 'teacher' ? 'Press Start to begin.' : 'Waiting for the teacher to start.'
+      status.className = 'edrys-pill'
+      status.textContent = 'Not started'
+      hint.textContent = Edrys.role === 'teacher' ? 'Press Start to begin.' : 'Waiting for the teacher to start.'
       return
     }
     const left = target - Date.now()
     time.textContent = format(Math.max(0, left))
     time.classList.toggle('over', left <= 0)
+    status.className = left > 0 ? 'edrys-pill ok' : 'edrys-pill warn'
     status.textContent = left > 0 ? 'Running' : 'Time is up'
+    hint.textContent = ''
   }
 
   Edrys.onReady(() => {

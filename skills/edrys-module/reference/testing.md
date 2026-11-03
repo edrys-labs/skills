@@ -52,7 +52,8 @@ After a change, reload the page in each peer's window (the server sends `no-stor
 - Errors the user can hit (cancelled port dialog, server down, device unplugged) are shown, and the module
   recovers.
 - Two entries of the module in one room, if a lab could do that.
-- Light and dark mode; a small tile (250 × 200) and a large one.
+- Light and dark: switch the classroom theme in edrys-Lite's user menu (⋮ → Theme) while the module is open;
+  editors, terminals and charts must switch too. A small tile (250 × 200), a large one, and a phone width.
 
 ## 3. Automate it: edrys-module-tests
 

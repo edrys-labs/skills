@@ -81,7 +81,11 @@ the items marked ⚙ automatically. Details are in the linked files.
 
 ## Design ([design-baseline.md](design-baseline.md))
 
-- [ ] water.css and open-iconic; works in light and dark mode.
+- [ ] water.css, open-iconic and edrys-module.css (after water.css); no title inside the module.
+- [ ] Follows the classroom theme: colours from `--edrys-*`, no hex for text or surfaces; JavaScript-made
+      colours (editor, terminal, chart) re-applied on `Edrys.onTheme?.()`. Checked in Light and Dark.
+- [ ] Status in an `.edrys-pill` in the `.edrys-toolbar`, main actions as `button.primary` (in the
+      `.edrys-footer` when there is one).
 - [ ] Fills the tile at 250 × 200 px and 1030 × 840 px; no horizontal page scroll.
 - [ ] Loading, empty, not-configured and error states are shown in words.
 - [ ] Labels on inputs, `aria-label` on icon buttons, visible focus.
