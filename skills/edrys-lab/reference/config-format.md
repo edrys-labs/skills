@@ -1,7 +1,7 @@
 # Classroom configuration format
 
 A lab is a classroom configuration: one YAML (preferred) or JSON file that edrys-Lite imports via
-`Settings → Share` or a deploy link. This file describes every key, what edrys-Lite does with it on
+`Settings → Import / Export` or a deploy link. This file describes every key, what edrys-Lite does with it on
 import, and which keys to leave out.
 
 Checked against edrys-Lite 3.1.0 (`normalizeClassroom` in `src/ts/Utils.ts`, `src/views/Deploy.vue`,
@@ -125,4 +125,4 @@ and it can be shared freely: whoever imports it becomes the owner of the new cla
   `github.com/.../blob/...` page does not (it returns HTML, which fails with "not a classroom").
 - Deploy link: `https://edrys-labs.github.io/?/deploy/<raw URL of the file>`. Opening it creates a new
   classroom owned by the visitor.
-- The same raw URL can be pasted into `Settings → Share` to restore an existing classroom from it.
+- The same raw URL can be pasted into `Settings → Import / Export` to restore an existing classroom from it.

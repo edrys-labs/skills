@@ -18,7 +18,7 @@ license: CC0-1.0
 
 # edrys-Lite labs
 
-A lab is one classroom configuration file. edrys-Lite imports it via a deploy link or `Settings → Share`; there
+A lab is one classroom configuration file. edrys-Lite imports it via a deploy link or `Settings → Import / Export`; there
 is no server that stores it. Everything below is checked against edrys-Lite 3.1.0 and the published modules.
 
 | Topic | File |

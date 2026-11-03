@@ -45,7 +45,7 @@ https://edrys-labs.github.io/?/deploy/https://raw.githubusercontent.com/<owner>/
   instead of `main`.
 - The deploy link only works once the repository is public and pushed.
 
-The same raw URL can be pasted into `Settings → Share` of an existing classroom to load the lab there.
+The same raw URL can be pasted into `Settings → Import / Export` of an existing classroom to load the lab there.
 
 ## README template
 
@@ -61,7 +61,7 @@ Fill in the placeholders; drop the station section for a simulation-only lab.
 [<img src="https://img.shields.io/badge/%F0%9F%9A%80%20-%20Deploy%20Lab%20-%20light?style=plastic" height="25" />](https://edrys-labs.github.io/?/deploy/https://raw.githubusercontent.com/<owner>/<repo>/main/laboratory/<topic>.yaml)
 
 The button creates a new classroom in your browser, with you as its owner. To load the lab into an existing
-classroom instead, paste this URL in `Settings → Share`:
+classroom instead, paste this URL in `Settings → Import / Export`:
 
 https://raw.githubusercontent.com/<owner>/<repo>/main/laboratory/<topic>.yaml
 
@@ -100,7 +100,7 @@ https://raw.githubusercontent.com/<owner>/<repo>/main/laboratory/<topic>.yaml
 
 Rules for the README:
 
-- Describe the current flow only: deploy button or `Settings → Share`. Old READMEs tell teachers to click
+- Describe the current flow only: deploy button or `Settings → Import / Export`. Old READMEs tell teachers to click
   "write protection"; that feature was removed from edrys-Lite.
 - Give the exact `docker run` line for the lab's workflow, with the `edryslabs/...` image and the port the lab's
   `stationConfig` uses (see [stations.md](stations.md)). Never `crosslab/edrys_pyxtermjs`.
