@@ -92,7 +92,8 @@ from a lab file in the user's browser and serves local modules. Otherwise skip t
   `goto {as: "station"}` a station tab; `goto {room}` moves the class tab.
 - `run_in_module {module, code}` runs JavaScript in the module's frame, e.g. to read its DOM. Only when the user
   asks or agrees: it acts in their browser.
-- The user talks to you in the chat panel over the class: answer `chat` events with the `chat` tool.
+- The user talks to you in the agent chat of the `/?dev` tab (sparkles button in its top bar): answer `chat`
+  events with the `chat` tool.
 - Still run `check-module.mjs`. Before the module is published and the lab shared, replace the local URLs
   (`get_state.local_urls`) with the published ones.
 
