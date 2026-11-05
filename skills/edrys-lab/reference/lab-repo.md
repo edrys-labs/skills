@@ -24,6 +24,10 @@ lab-<topic>/
   are named.
 - Add the GitHub topic **`edrys-lab`** so the lab is listed at https://github.com/topics/edrys-lab:
   `gh repo edit <owner>/<repo> --add-topic edrys-lab`.
+  Repositories of the `edrys-labs` organization with this topic also appear in edrys-Lite's `Browse labs`
+  (Create a class → From a ready-made lab, and Settings → Import / Export). It lists every lab file in the
+  repository by its `name` and `meta.description`, and tags it `Needs a station` when a module's
+  `showInCustom` contains `station`.
 - Only YAML. Old labs ship the same lab as `.json` too; that is not needed.
 - `meta.logo` points to the logo's raw URL:
   `https://raw.githubusercontent.com/<owner>/<repo>/main/media/logo.jpg`. The image is fetched by every
