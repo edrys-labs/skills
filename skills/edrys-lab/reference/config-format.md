@@ -54,6 +54,7 @@ file without `modules` is an empty classroom, so always write both.
 | `logo` | `""` | Absolute image URL, shown on the classroom card. Host it in the lab repo (`media/`) and link the raw URL. |
 | `description` | `""` | Plain text shown on the classroom card. Use a folded scalar (`>-`) for long text. |
 | `defaultNumberOfRooms` | `0` | Creates the rooms `Room 1` … `Room N` in addition to the Lobby (max. 50). Use it for group work; leave at `0` when everybody works in the Lobby and at stations. |
+| `roomNames` | `{}` | Display names for numbered rooms, e.g. `{ Room 2: Group B }`. Up to 40 characters, unique, no `,` or `*`, not `Lobby`, `Station …` or `Room <number>`. Teachers can also rename rooms in class. |
 | `selfAssign` | `false` | **Leave out.** Not implemented; nothing reads it (the checkbox is hidden in the settings). |
 | `id` | – | **Leave out.** Found in some old labs; nothing reads it. |
 

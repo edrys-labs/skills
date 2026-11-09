@@ -56,7 +56,7 @@ Edrys.onReady(() => {
   render()                       // the current state, for late joiners
 
   button.onclick = () => Edrys.updateState(() => {
-    items.set(id, { done: true, by: Edrys.liveUser?.displayName })
+    items.set(id, { done: true, by: Edrys.liveUser?.username || Edrys.liveUser?.displayName })
     items.set('updatedAt', Date.now())
   })
 })
@@ -138,7 +138,15 @@ Or let one peer create it (the teacher, the station) and have the others wait fo
 ```js
 Edrys.onReady(() => {
   const awareness = Edrys.getState('checklist', 'Awareness')
-  awareness.setLocalStateField('user', { name: Edrys.liveUser?.displayName, role: Edrys.role })
+  let published
+  const publishUser = () => {
+    const name = Edrys.liveUser?.username || Edrys.liveUser?.displayName
+    if (name === published) return   // onUpdate fires often
+    published = name
+    awareness.setLocalStateField('user', { name, role: Edrys.role })
+  }
+  publishUser()
+  Edrys.onUpdate(publishUser)        // users can rename themselves
   awareness.on('change', () => showViewers([...awareness.getStates().values()].map((s) => s.user)))
 })
 ```

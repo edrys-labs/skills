@@ -78,6 +78,21 @@ if (lab.meta === undefined) {
     if (!Number.isInteger(rooms) || rooms < 0) error('meta.defaultNumberOfRooms', `must be a whole number >= 0, got ${JSON.stringify(meta.defaultNumberOfRooms)}`)
     else if (rooms > 50) warn('meta.defaultNumberOfRooms', `${rooms} is more than the maximum of 50 rooms; only 50 are created`)
   }
+  if (meta.roomNames !== undefined) {
+    if (typeof meta.roomNames !== 'object' || meta.roomNames === null || Array.isArray(meta.roomNames)) {
+      error('meta.roomNames', 'must be a map of room to name, e.g. { Room 2: Group B }')
+    } else {
+      for (const [room, label] of Object.entries(meta.roomNames)) {
+        const where = `meta.roomNames.${room}`
+        if (!/^Room [1-9]\d*$/.test(room)) warn(where, 'only numbered rooms (Room 1, Room 2, ...) can have a display name')
+        if (typeof label !== 'string' || label.trim().length > 40 || /[,*]/.test(label)) {
+          error(where, 'must be text of at most 40 characters without , or *')
+        } else if (/^(lobby|station\b|room\s+\d+$)/i.test(label.trim())) {
+          error(where, `"${label}" is reserved: it can't be Lobby, Station ... or Room <number>`)
+        }
+      }
+    }
+  }
   if ('selfAssign' in meta) warn('meta.selfAssign', 'remove it: not implemented, nothing reads it')
   if ('id' in meta) warn('meta.id', 'remove it: nothing reads it')
 }

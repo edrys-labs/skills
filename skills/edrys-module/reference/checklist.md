@@ -54,6 +54,7 @@ the items marked ⚙ automatically. Details are in the linked files.
 - [ ] Nested types come from `window.Y`; bundled Yjs bindings are aliased to it.
 - [ ] No high-frequency or unbounded data in state; cursors and presence use awareness.
 - [ ] ⚙ Nothing writes to `Edrys.liveClass` / `liveRoom` / `liveUser`.
+- [ ] People are shown as `username || displayName`, and data is keyed on `Edrys.username`, never on a name.
 
 ## Streams ([state-messaging-streams.md](state-messaging-streams.md#streams))
 

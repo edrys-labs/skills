@@ -44,11 +44,17 @@ All set before `onReady` runs. Treat them as read-only.
 | `Edrys.username` | this peer's ID: a long key for people, `"Station <name>"` for a station. The key in `liveClass.users` and the address for `sendMessage`. |
 | `Edrys.class_id` | the classroom ID (as in its link) |
 | `Edrys.module` | this module entry of the lab: `url`, `name`, `showInCustom`, `width`, `height`, `config`, `studentConfig`, `teacherConfig`, `stationConfig`, … |
-| `Edrys.liveUser` | `liveClass.users[Edrys.username]`: `{ name, displayName, role, room, dateJoined, handRaised, connections }`. Can be `undefined` for a moment; use `?.`. |
+| `Edrys.liveUser` | `liveClass.users[Edrys.username]`: `{ name, displayName, username, role, room, dateJoined, handRaised, connections }`. Can be `undefined` for a moment; use `?.`. |
 | `Edrys.liveRoom` | the shared state of the current room as a plain object (no name; the name is `liveUser.room`) |
+| `Edrys.roomLabel` | the room's name to show to people. Teachers can rename numbered rooms; `liveUser.room` stays `Room 2`, so key data on that |
 | `Edrys.liveClass` | `{ users, rooms }`: every present peer by username (all rooms), and every room's state as plain JSON |
 | `Edrys.theme` | `"light"` or `"dark"`, the classroom's theme (since edrys-Lite 3.2.0; `undefined` before the first update and in older versions) |
 | `Edrys.debug` | set `true` to log edrys.js internals to the console |
+
+`displayName` is the short ID (a station's name for a station). `username` is the name the user chose, or `null`.
+Show `username || displayName`. A chosen name isn't unique and can change at any time, so
+never key data on it; use `Edrys.username`. In stored records, keep the short ID too (`Ada · 3fa2b1c0`), so two people
+with the same name stay apart. An `Edrys.onUpdate` handler sees a rename.
 
 `Edrys.liveClass`, `liveRoom` and `liveUser` are **read-only snapshots**, rebuilt on every update. Writing to
 them changes at most this peer's copy until the next update; nobody else sees it. Change shared data with

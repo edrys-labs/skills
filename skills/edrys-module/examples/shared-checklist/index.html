@@ -130,7 +130,7 @@
 
       function toggle(item, checked) {
         Edrys.updateState(() => {
-          if (checked) done.set(item, { by: Edrys.liveUser?.displayName || Edrys.username, at: Date.now() })
+          if (checked) done.set(item, { by: Edrys.liveUser?.username || Edrys.liveUser?.displayName || Edrys.username, at: Date.now() })
           else done.delete(item)
         })
       }
@@ -198,7 +198,15 @@
 
         // Awareness: short-lived "who is here", removed when a peer leaves
         awareness = Edrys.getState(doneKey, 'Awareness')
-        awareness.setLocalStateField('user', { name: Edrys.liveUser?.displayName || Edrys.username })
+        let published
+        const publishUser = () => {
+          const name = Edrys.liveUser?.username || Edrys.liveUser?.displayName || Edrys.username
+          if (name === published) return
+          published = name
+          awareness.setLocalStateField('user', { name })
+        }
+        publishUser()
+        Edrys.onUpdate(publishUser) // users can rename themselves
         awareness.on('change', renderViewers)
         renderViewers()
 

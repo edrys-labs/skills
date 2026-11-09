@@ -8,7 +8,7 @@ Checked against edrys-Lite 3.1.0 (`scrapedModulesFilter` and `checkRoomMatch` in
 | Room | Who is there |
 |------|--------------|
 | **Lobby** | Everybody on entering the classroom. |
-| **Room 1 … Room N** | Created by `meta.defaultNumberOfRooms` (or by the teacher during class). For group work. |
+| **Room 1 … Room N** | Created by `meta.defaultNumberOfRooms` (or by the teacher during class). For group work. `meta.roomNames` or the teacher can give them a display name; the room stays `Room N` underneath. |
 | **Station \<name\>** | Opened by a station window (`…/?/station/<id>`). The station device stays there; students enter it to use what it shares (hardware, terminal, camera). |
 
 ## `showInCustom`
@@ -36,6 +36,9 @@ Matching is case-insensitive for room names, but the flags must be written exact
 (`teacher-only`, `station-only`). `Teacher-only` is not recognized as a flag and is treated as a room
 name instead, so the module is shown to everybody. If both flags are given, only `teacher-only` takes
 effect.
+
+A renamed room matches both its number and its name: with `Room 2: Group B`, the entries `Room 2` and `Group B`
+mean the same room. Prefer `Room 2` in a lab file, since it still matches after a teacher renames the room.
 
 The localized names from the edrys-Lite interface (`nur Lehrer`, `Raum 1`, …) are accepted too, but
 always write the English form in a lab file.
