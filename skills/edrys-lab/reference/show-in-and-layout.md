@@ -7,7 +7,7 @@ Checked against edrys-Lite 3.1.0 (`scrapedModulesFilter` and `checkRoomMatch` in
 
 | Room | Who is there |
 |------|--------------|
-| **Lobby** | Everybody on entering the classroom. |
+| **Lobby** | Everybody on entering the classroom. With `meta.teacherMovesStudents: true`, students stay here until a teacher moves them, so put what they need while waiting in the Lobby. |
 | **Room 1 … Room N** | Created by `meta.defaultNumberOfRooms` (or by the teacher during class). For group work. `meta.roomNames` or the teacher can give them a display name; the room stays `Room N` underneath. |
 | **Station \<name\>** | Opened by a station window (`…/?/station/<id>`). The station device stays there; students enter it to use what it shares (hardware, terminal, camera). |
 

@@ -93,6 +93,10 @@ if (lab.meta === undefined) {
       }
     }
   }
+  if ('teacherMovesStudents' in meta && typeof meta.teacherMovesStudents !== 'boolean') {
+    // edrys-Lite reads any non-empty value as on, so "false" in quotes would lock students
+    error('meta.teacherMovesStudents', `must be true or false, got ${JSON.stringify(meta.teacherMovesStudents)}`)
+  }
   if ('selfAssign' in meta) warn('meta.selfAssign', 'remove it: not implemented, nothing reads it')
   if ('id' in meta) warn('meta.id', 'remove it: nothing reads it')
 }

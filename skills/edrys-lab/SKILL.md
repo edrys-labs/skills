@@ -36,6 +36,8 @@ is no server that stores it. Everything below is checked against edrys-Lite 3.1.
    - the subject and what students do (read, write code, type commands, watch hardware, draw, answer);
    - hardware: which board, and is a computer next to it available as a station? If not, a simulator;
    - groups: everybody in the Lobby, group rooms (`meta.defaultNumberOfRooms`), or one station per group;
+   - who sends students to their room or station: they choose themselves (default), or only the teacher
+     (`meta.teacherMovesStudents: true`);
    - individual or shared work (decides `synchronize`);
    - output: the classroom file (default) or a full lab repository.
 2. **Pick modules** from the catalog below. Read the module's catalog file before configuring it: which config
@@ -153,6 +155,7 @@ peer IDs in `members`. When starting from an exported or older lab, delete them 
 | Real hardware students control remotely | Yes: a station next to the hardware ([stations.md](reference/stations.md)). |
 | Arduino or micro:bit without hardware | Yes: avr8js, micropython-simulator. No station needed. |
 | Group work in separate rooms | Yes: `meta.defaultNumberOfRooms` and `showInCustom: Room *` (or per room). |
+| Teacher decides who goes where | Yes: `meta.teacherMovesStudents: true`; students wait in the Lobby until a teacher moves them. |
 | Several identical hardware setups | Yes: one station per setup; all share one `stationConfig`. |
 | Hide solutions from students | Only in the interface. `teacherConfig` reaches every browser; nothing in a lab is secret. |
 | Restrict who may join | Yes, in the class: `Settings → Members` (student list). Not part of a shareable lab file. |
