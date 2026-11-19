@@ -60,8 +60,8 @@ the station edit.
 
 | Key | Note |
 |-----|------|
-| `synchronize` | **Off unless set.** `true` = one shared document per room, edited together live. Without it every peer edits a private copy. Set it explicitly either way. |
-| `value` | Initial code, and the target of the Reset button (teachers, station). With `synchronize` it only seeds the room once; changing it later does not replace code already in the room (press Reset). |
+| `synchronize` | **Off unless set.** `true` = one shared document per room, edited together live. Without it every peer edits a private copy, kept in their browser (per class and room) across reloads. Set it explicitly either way. |
+| `value` | Initial code, and the target of the Reset button (teachers, station). With `synchronize` it only seeds the room once; changing it later does not replace code already in the room (press Reset). Without `synchronize`, changing it replaces every saved private copy. |
 | `runCommand` | Subject of the Execute message, default `execute`. Must equal the runner's subject (`stationConfig.execute` of pyxtermjs, `config.execute` of avr8js). |
 | `language` | Default `cpp`. Any Monaco language id (`python`, `javascript`, …). |
 | `editorId` | **Required when two editors share a room**; otherwise both show the same document. |

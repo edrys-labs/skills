@@ -42,7 +42,7 @@ With `synchronize` the room shares one board, kept in the room's state for late 
 
 | Key | Note |
 |-----|------|
-| `synchronize` | **Off unless set.** Off: each person draws alone, and the board is lost on reload. |
+| `synchronize` | **Off unless set.** Off: each person draws alone; the board is kept in their browser (per class and room) across reloads, but pasted images are not. |
 
 **Example:**
 

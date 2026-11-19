@@ -5,8 +5,8 @@
 - **URL:** `https://edrys-labs.github.io/module-blockly-duino-v2/index.html`
 - **Source:** https://github.com/edrys-labs/module-blockly-duino-v2
 - **Default rooms (`show-in`):** `*`
-- **Description:** Program https://www.arduino.cc boards with blocks, together: everyone in a room edits one program, and the run button sends the generated code to the station. Configuration options: https://github.com/edrys-labs/module-blockly-duino-v2
-- **Schema read:** 2026-10-27
+- **Description:** Program https://www.arduino.cc boards with blocks, together (with synchronize, everyone in a room edits one program) or each on their own, and the run button sends the generated code to the station. Configuration options: https://github.com/edrys-labs/module-blockly-duino-v2
+- **Schema read:** 2026-11-19
 
 ### Config schema
 
@@ -14,7 +14,8 @@
 
 | Key | Type | Default | Hint |
 |-----|------|---------|------|
-| `code` | code-area |  | Blockly XML the room starts with (save it from the editor menu, or see the README). Empty: start with an empty program. |
+| `code` | code-area |  | Blockly XML the program starts with (save it from the editor menu, or see the README). Empty: start with an empty program. |
+| `synchronize` | boolean |  | Share one program across all peers in the room, edited together; otherwise each peer builds their own copy, kept in their browser |
 | `board` | select: arduino_uno / arduino_nano / arduino_mini / arduino_pro8 / arduino_pro16 / lilypad / arduino_mega / arduino_leonardo / arduino_micro / arduino_yun |  | Board the room starts with; sets the pins the blocks offer. Teachers and stations can change it in class. |
 | `runCommand` | string |  | Subject the run button sends the Arduino code with, e.g. to a terminal module (default: execute) |
 
@@ -28,6 +29,7 @@ this lab: without them the module is 250 × 200px (see [show-in-and-layout.md](.
 - url: https://edrys-labs.github.io/module-blockly-duino-v2/index.html
   config:
     # code: ''  # code-area
+    # synchronize: false  # boolean
     # board: ''  # select: arduino_uno | arduino_nano | arduino_mini | arduino_pro8 | arduino_pro16 | lilypad | arduino_mega | arduino_leonardo | arduino_micro | arduino_yun
     # runCommand: ''  # string
   showInCustom: '*'
