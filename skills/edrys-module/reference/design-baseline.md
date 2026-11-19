@@ -7,10 +7,6 @@ light or dark theme. Follow it unless the user's design says otherwise. Good ref
 [module-survey](https://github.com/edrys-labs/module-survey) (a chart library that bakes colours),
 [module-markdown-it](https://github.com/edrys-labs/module-markdown-it) (content, YAML version too).
 
-The theme parts (`edrys-module.css`, `Edrys.theme`, `Edrys.onTheme`) need edrys-Lite 3.2.0 or later. In an older
-edrys-Lite the module gets no theme and follows the OS setting, so write theme code that works without them
-(below).
-
 ## Foundation
 
 ```html
@@ -39,8 +35,8 @@ edrys-Lite the module gets no theme and follows the OS setting, so write theme c
 ## Theme
 
 edrys.js puts the classroom's theme on `<html data-theme="light">` or `"dark"` and on `Edrys.theme`, and calls
-`Edrys.onTheme` handlers when the user switches it. edrys-module.css follows by itself; without `data-theme` (an
-older edrys-Lite, the page opened on its own) it follows the OS setting.
+`Edrys.onTheme` handlers when the user switches it. edrys-module.css follows by itself; without `data-theme` (the
+page opened on its own) it follows the OS setting.
 
 - **Colours come from the `--edrys-*` variables**, never hex in the module:
 
@@ -58,6 +54,13 @@ older edrys-Lite, the page opened on its own) it follows the OS setting.
   The full list is at the top of
   [edrys-module.css](https://github.com/edrys-labs/edrys-Lite/blob/main/static/module/edrys-module.css). An own
   colour that both themes need: define it on `:root`, override it under `[data-theme='dark']`.
+- **The main colour follows the class design.** A teacher can give the classroom another design (Compact,
+  Playful, or their own colours); edrys.js then sets `--edrys-primary` and `--edrys-on-primary` as inline
+  variables on `<html>`, so the module's main buttons match the classroom. Only these two change: the other
+  variables, the fonts, sizes and spacing stay the same in every design, and a module never gets the classroom's
+  font or corners. So use `--edrys-primary` for the main action only (`button.primary`, a selected tab), never
+  for text on the page or a large surface, and always pair it with `--edrys-on-primary`: the teacher's colour can
+  be light (Playful's pink has dark text) or dark.
 - **CSS that reads the variables switches by itself.** Only code that bakes colours in JavaScript (a chart, an
   editor or terminal theme, a canvas) needs to listen:
 
@@ -72,12 +75,14 @@ older edrys-Lite, the page opened on its own) it follows the OS setting.
   function applyTheme() { /* rebuild the widget's theme from color('--edrys-bg') etc. */ }
 
   applyTheme()
-  // ?. : an older edrys.js has no onTheme, and a throw here stops onReady from running
-  Edrys.onTheme?.(applyTheme)
+  Edrys.onTheme(applyTheme)
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
     if (!document.documentElement.dataset.theme) applyTheme()
   })
   ```
+
+  A change of only the main colour (a teacher saves a new design) calls no `onTheme` handler. JavaScript that
+  draws with `--edrys-primary` reads it again each time it draws, rather than once in `applyTheme`.
 
 - **Widgets with their own theme API:** Monaco `defineTheme` from the variables (define it again on every change,
   the values differ) + `setTheme`; xterm `term.options.theme = {...}` (v5+) or `term.setOption('theme', …)`

@@ -19,7 +19,7 @@ license: CC0-1.0
 # edrys-Lite labs
 
 A lab is one classroom configuration file. edrys-Lite imports it via a deploy link or `Settings → Import / Export`; there
-is no server that stores it. Everything below is checked against edrys-Lite 3.1.0 and the published modules.
+is no server that stores it. Everything below is checked against the edrys-Lite source and the published modules.
 
 | Topic | File |
 |-------|------|
@@ -156,6 +156,7 @@ peer IDs in `members`. When starting from an exported or older lab, delete them 
 | Arduino or micro:bit without hardware | Yes: avr8js, micropython-simulator. No station needed. |
 | Group work in separate rooms | Yes: `meta.defaultNumberOfRooms` and `showInCustom: Room *` (or per room). |
 | Teacher decides who goes where | Yes: `meta.teacherMovesStudents: true`; students wait in the Lobby until a teacher moves them. |
+| A look for younger learners, a denser screen, or the school's colours | Yes: `meta.design: playful` / `compact`, or `custom` with `meta.customDesign` ([config-format.md](reference/config-format.md#class-design)). Colours, font, corners and sizes only; no layout changes, no CSS. Modules take only the main colour. |
 | Several identical hardware setups | Yes: one station per setup; all share one `stationConfig`. |
 | Hide solutions from students | Only in the interface. `teacherConfig` reaches every browser; nothing in a lab is secret. |
 | Restrict who may join | Yes, in the class: `Settings → Members` (student list). Not part of a shareable lab file. |

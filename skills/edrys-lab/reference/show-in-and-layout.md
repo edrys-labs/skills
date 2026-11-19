@@ -1,6 +1,6 @@
 # Rooms, `showInCustom` and module size
 
-Checked against edrys-Lite 3.1.0 (`scrapedModulesFilter` and `checkRoomMatch` in
+Checked against the edrys-Lite source (`scrapedModulesFilter` and `checkRoomMatch` in
 `src/components/Modules.vue`, the design form in `src/components/Settings/Module.vue`).
 
 ## Rooms

@@ -17,8 +17,7 @@ license: CC0-1.0
 
 A module is a web page that edrys-Lite loads in an iframe, once per peer, and configures per lab entry. It
 talks to the classroom through `edrys.js`: messages to the room, shared Yjs state per room, streams. There is
-no server; every peer runs the module's code. Checked against edrys-Lite 3.1.0; the theme parts
-(`edrys-module.css`, `Edrys.theme`, `Edrys.onTheme`) need 3.2.0.
+no server; every peer runs the module's code. Checked against the edrys-Lite source.
 
 | Topic | File |
 |-------|------|
@@ -118,7 +117,6 @@ None of these shows an error in edrys-Lite; the module just doesn't work.
 | YAML module: `module-config` as a map, or `show-in` as a string | no settings form / module fails to load | `module-config: \|` string; `show-in: ['*']` |
 | YAML or `fetch` module with `…`, `ü`, `✓` | shown as `%u2026` | `&hellip;` in HTML, `\u2026` in JS |
 | YAML or `fetch` module with `localStorage` / `Edrys.setItem` / relative URLs | throws / 404 | HTML module, or absolute URLs and no storage |
-| `Edrys.onTheme(fn)` without `?.` at the top level | in an older edrys-Lite the script throws, the module never gets ready | `Edrys.onTheme?.(fn)` |
 | Hex colours in module CSS, or editor/terminal colours set once | unreadable in the dark theme, or stuck in the theme it loaded with | `--edrys-*` variables; re-apply widget themes on `onTheme` |
 | edrys-module.css linked before water.css | colours follow the theme, but fonts, buttons and fields keep water's look | link it after water.css |
 | `display: flex` on an element with `hidden` | role-only controls visible to everyone | `[hidden] { display: none !important; }` |

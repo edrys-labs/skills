@@ -97,8 +97,97 @@ if (lab.meta === undefined) {
     // edrys-Lite reads any non-empty value as on, so "false" in quotes would lock students
     error('meta.teacherMovesStudents', `must be true or false, got ${JSON.stringify(meta.teacherMovesStudents)}`)
   }
+  if ('design' in meta && !['standard', 'compact', 'playful', 'custom'].includes(meta.design)) {
+    // edrys-Lite shows anything else as standard
+    error('meta.design', `must be standard, compact, playful or custom, got ${JSON.stringify(meta.design)}`)
+  }
+  if (meta.design === 'custom' && meta.customDesign === undefined) {
+    warn('meta.customDesign', 'missing: design custom without customDesign looks like standard')
+  }
+  if (meta.customDesign !== undefined) checkCustomDesign(meta.customDesign)
   if ('selfAssign' in meta) warn('meta.selfAssign', 'remove it: not implemented, nothing reads it')
   if ('id' in meta) warn('meta.id', 'remove it: nothing reads it')
+}
+
+// The same rules as checkDesign in edrys-Lite's src/ts/CustomDesign.ts: what breaks
+// them is left out in the classroom (and listed in Settings → Design).
+function checkCustomDesign(design) {
+  const at = (path) => `meta.customDesign${path ? '.' + path : ''}`
+  const isMap = (x) => x !== null && typeof x === 'object' && !Array.isArray(x)
+  if (!isMap(design)) return error(at(''), 'must be a map (see reference/config-format.md#class-design)')
+
+  const px = (value, min, max, also = []) => {
+    const n =
+      typeof value === 'number' ? value
+      : typeof value === 'string' && /^\d{1,4}(\.\d{1,2})?(px)?$/.test(value.trim()) ? parseFloat(value)
+      : NaN
+    return Number.isFinite(n) && ((n >= min && n <= max) || also.includes(n))
+  }
+  const radius = [0, 64, [999]]
+  const ranges = {
+    shape: Object.fromEntries([
+      ...['dialog', 'card', 'row', 'control', 'chip', 'tile', 'pill'].map((k) => [`radius-${k}`, radius]),
+      ['line', [0, 6]],
+    ]),
+    text: Object.fromEntries(['10', '11', '12', '13', '14', '15', '16', '17', '18', '20', '22'].map((n) => [`text-${n}`, [8, 40]])),
+    sizes: { bar: [32, 120], drawer: [160, 480], chat: [240, 600], 'bar-button': [20, 72], 'module-head': [20, 72] },
+  }
+  const colors = new Set(`background surface surface-variant on-surface-variant on-background on-surface primary
+    on-primary secondary error info success warning bar-line bar-icon bar-active bar-divider panel panel-line
+    panel-divider room-current room-hover avatar text-2 line dashed muted focus link badge danger-fill info-tint
+    primary-tint primary-text success-tint warning-tint teacher-tint teacher own-message you message message-edge
+    field module module-head module-line module-edge module-icon row row-edge icon-tile tonal faint danger-tint
+    danger-line subtle track spinner menu menu-line field-line segment toast on-toast toast-action ink pop pop-2
+    dots head-1 head-2 head-3 head-4 person-1 person-2 person-3 person-4`.split(/\s+/))
+
+  for (const key of Object.keys(design)) {
+    if (!['name', 'base', 'font', 'shape', 'text', 'sizes', 'extras', 'light', 'dark'].includes(key)) error(at(key), 'not a design field')
+  }
+  if ('name' in design && (typeof design.name !== 'string' || [...design.name.trim()].length > 40)) error(at('name'), 'must be text of at most 40 characters')
+  if ('base' in design && !['standard', 'compact', 'playful'].includes(design.base)) error(at('base'), 'must be standard, compact or playful')
+  if ('font' in design && !['noto-sans', 'ibm-plex-sans', 'fredoka'].includes(design.font)) error(at('font'), 'must be noto-sans, ibm-plex-sans or fredoka')
+
+  for (const [group, limits] of Object.entries(ranges)) {
+    const block = design[group]
+    if (block === undefined) continue
+    if (!isMap(block)) { error(at(group), 'must be a map'); continue }
+    for (const [key, value] of Object.entries(block)) {
+      if (!(key in limits)) error(at(`${group}.${key}`), 'not a design field')
+      else if (!px(value, ...limits[key])) error(at(`${group}.${key}`), `must be px from ${limits[key][0]} to ${limits[key][1]}${limits[key][2] ? ' or 999' : ''}, got ${JSON.stringify(value)}`)
+    }
+  }
+
+  const extras = design.extras
+  if (extras !== undefined && !isMap(extras)) error(at('extras'), 'must be a map')
+  else if (extras) {
+    for (const [key, value] of Object.entries(extras)) {
+      const where = at(`extras.${key}`)
+      if (key === 'title-case') { if (value !== 'none' && value !== 'uppercase') error(where, 'must be none or uppercase') }
+      else if (key === 'title-spacing') {
+        const em = value === 'normal' ? 0 : typeof value === 'number' ? value : /^\d(\.\d{1,3})?em$/.test(String(value)) ? parseFloat(value) : NaN
+        if (!(em >= 0 && em <= 0.3)) error(where, 'must be normal or 0 to 0.3em')
+      } else if (key === 'dots' || key === 'shadow-offset') {
+        if (design.base !== 'playful') error(where, 'only drawn with base: playful')
+        else if (key === 'dots' ? typeof value !== 'boolean' : !px(value, 0, 16)) error(where, key === 'dots' ? 'must be true or false' : 'must be px from 0 to 16')
+      } else error(where, 'not a design field')
+    }
+  }
+
+  for (const half of ['light', 'dark']) {
+    const block = design[half]
+    if (block === undefined) continue
+    if (!isMap(block)) { error(at(half), 'must be a map with colors'); continue }
+    for (const key of Object.keys(block)) if (key !== 'colors') error(at(`${half}.${key}`), 'not a design field (only colors)')
+    if (block.colors === undefined) continue
+    if (!isMap(block.colors)) { error(at(`${half}.colors`), 'must be a map of colour names'); continue }
+    for (const [key, value] of Object.entries(block.colors)) {
+      const where = at(`${half}.colors.${key}`)
+      if (!colors.has(key)) error(where, 'not a colour name (the full list is linked from reference/config-format.md#class-design)')
+      // primary: #2d6a4f without quotes is a YAML comment, so the value is empty
+      else if (value === null) error(where, 'empty: put the colour in quotes, # starts a YAML comment')
+      else if (typeof value !== 'string' || !/^#[0-9a-fA-F]{6}$/.test(value.trim())) error(where, `must be #rrggbb, got ${JSON.stringify(value)}`)
+    }
+  }
 }
 
 // --- members -----------------------------------------------------------------

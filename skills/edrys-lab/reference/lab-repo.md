@@ -3,7 +3,7 @@
 A lab repository publishes a lab on GitHub so others can open it with one click. Create one only when the user
 asks for it; otherwise the classroom file alone is the result.
 
-Checked against edrys-Lite 3.1.0 (the `/deploy/:url` route in `src/index.ts`, `src/views/Deploy.vue`).
+Checked against the edrys-Lite source (the `/deploy/:url` route in `src/index.ts`, `src/views/Deploy.vue`).
 
 ## Layout
 

@@ -4,7 +4,7 @@ A lab is a classroom configuration: one YAML (preferred) or JSON file that edrys
 `Settings → Import / Export` or a deploy link. This file describes every key, what edrys-Lite does with it on
 import, and which keys to leave out.
 
-Checked against edrys-Lite 3.1.0 (`normalizeClassroom` in `src/ts/Utils.ts`, `src/views/Deploy.vue`,
+Checked against the edrys-Lite source (`normalizeClassroom` in `src/ts/Utils.ts`, `src/views/Deploy.vue`,
 `src/components/Settings/Share.vue`).
 
 ## Minimal lab
@@ -56,8 +56,58 @@ file without `modules` is an empty classroom, so always write both.
 | `defaultNumberOfRooms` | `0` | Creates the rooms `Room 1` … `Room N` in addition to the Lobby (max. 50). Use it for group work; leave at `0` when everybody works in the Lobby and at stations. |
 | `roomNames` | `{}` | Display names for numbered rooms, e.g. `{ Room 2: Group B }`. Up to 40 characters, unique, no `,` or `*`, not `Lobby`, `Station …` or `Room <number>`. Teachers can also rename rooms in class. |
 | `teacherMovesStudents` | `false` | `true`: students start in the Lobby and can't change rooms; only teachers move them, to rooms and stations, from the room list. Students still see all rooms and who is in them. For guided labs where the teacher assigns groups or station slots. Organizes the class; not exam-grade isolation. Write `true`/`false`, not a quoted string. |
+| `design` | `standard` | How the classroom looks for everyone: `standard`, `compact` (smaller text, square corners, fits more modules), `playful` (bigger text, round shapes, bright colours, for younger learners) or `custom` (the design in `customDesign`). Each person's Light/Dark choice still applies; modules keep their own look and take only the main colour. Leave it out unless the user asks for a look. See [Class design](#class-design). |
+| `customDesign` | – | The class's own design, read only with `design: custom`. See [Class design](#class-design). |
 | `selfAssign` | `false` | **Leave out.** Not implemented; nothing reads it (the checkbox is hidden in the settings). |
 | `id` | – | **Leave out.** Found in some old labs; nothing reads it. |
+
+### Class design
+
+`customDesign` holds values only, never CSS. Every browser checks it before showing it (`checkDesign` in
+`src/ts/CustomDesign.ts`): an entry that isn't a known field with a valid value is left out, listed under
+`Settings → Design`, and the rest still applies. Every field is optional; what's missing comes from `base`.
+
+```yaml
+meta:
+  design: custom
+  customDesign:
+    name: Forest              # up to 40 characters
+    base: standard            # standard | compact | playful
+    font: noto-sans           # noto-sans | ibm-plex-sans | fredoka
+    shape:
+      radius-card: 16px       # also radius-dialog, -row, -control, -chip, -tile, -pill: 0–64, or 999 for round
+      line: 1px               # 0–6: side lines of drawer and chat, under module headers, Playful's outlines
+    text:
+      text-13: 14px           # text-10 … text-18, text-20, text-22: 8–40, named after their size in Standard
+    sizes:
+      bar: 60px               # 32–120 top bar height
+      drawer: 264px           # 160–480 rooms menu width
+      chat: 360px             # 240–600 chat width
+      bar-button: 36px        # 20–72
+      module-head: 40px       # 20–72 module header height
+    extras:
+      title-case: uppercase   # none | uppercase (module titles)
+      title-spacing: 0.05em   # normal | 0–0.3em
+      # base: playful only: dots (true/false), shadow-offset (0–16)
+    light:
+      colors:
+        primary: '#2d6a4f'    # quote every colour: # starts a YAML comment
+        on-primary: '#ffffff'
+        background: '#e3eee6'
+        surface-variant: '#1b4332'     # top bar
+        on-surface-variant: '#ffffff'
+    dark:
+      colors:
+        primary: '#52b788'
+        on-primary: '#081c15'
+```
+
+- Sizes are pixels: `12`, `"12"` or `12px`, up to two decimals. Colours exactly `#rrggbb`, always quoted in YAML.
+- Give both halves: a colour set only under `light` leaves Dark at the base's colour. Pair every background
+  colour with its text colour (`primary`/`on-primary`, `surface-variant`/`on-surface-variant` + `bar-icon`).
+- The full colour list (77 names, grouped by where they show) and every field's limits:
+  [documentation, Design file](https://liascript.github.io/course/?https://raw.githubusercontent.com/edrys-labs/documentation/refs/heads/main/README.md#Design-file).
+- The file is at most 50 KB. Phones keep their own bar height and rooms menu width.
 
 ## `modules[]`
 

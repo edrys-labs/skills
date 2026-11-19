@@ -4,7 +4,7 @@ A station is a browser window left open on a computer next to the lab hardware. 
 classroom as its own room, `Station <name>`, and shares what its modules connect to (a terminal, a serial
 port, a camera) with everyone who enters that room.
 
-Checked against edrys-Lite 3.1.0 (`src/views/Classroom.vue`, `isAuthorizedUserSigner` in `src/ts/Peer.ts`,
+Checked against the edrys-Lite source (`src/views/Classroom.vue`, `isAuthorizedUserSigner` in `src/ts/Peer.ts`,
 `src/components/Settings/Stations.vue`) and the module repos linked below.
 
 ## Does the lab need a station?

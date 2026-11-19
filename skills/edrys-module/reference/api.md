@@ -3,7 +3,7 @@
 Checked against [`src/api/edrys.ts`](https://github.com/edrys-labs/edrys-Lite/blob/main/src/api/edrys.ts) and the
 host side ([`Module.vue`](https://github.com/edrys-labs/edrys-Lite/blob/main/src/components/Module.vue),
 [`Modules.vue`](https://github.com/edrys-labs/edrys-Lite/blob/main/src/components/Modules.vue),
-[`Peer.ts`](https://github.com/edrys-labs/edrys-Lite/blob/main/src/ts/Peer.ts)) of edrys-Lite 3.1.0.
+[`Peer.ts`](https://github.com/edrys-labs/edrys-Lite/blob/main/src/ts/Peer.ts)) of edrys-Lite.
 
 Load it from the published URL, never a copy in your repo (a copy misses API fixes):
 
@@ -48,7 +48,7 @@ All set before `onReady` runs. Treat them as read-only.
 | `Edrys.liveRoom` | the shared state of the current room as a plain object (no name; the name is `liveUser.room`) |
 | `Edrys.roomLabel` | the room's name to show to people. Teachers can rename numbered rooms; `liveUser.room` stays `Room 2`, so key data on that |
 | `Edrys.liveClass` | `{ users, rooms }`: every present peer by username (all rooms), and every room's state as plain JSON |
-| `Edrys.theme` | `"light"` or `"dark"`, the classroom's theme (since edrys-Lite 3.2.0; `undefined` before the first update and in older versions) |
+| `Edrys.theme` | `"light"` or `"dark"`, the classroom's theme (`undefined` before the first update) |
 | `Edrys.debug` | set `true` to log edrys.js internals to the console |
 
 `displayName` is the short ID (a station's name for a station). `username` is the name the user chose, or `null`.
@@ -62,17 +62,18 @@ them changes at most this peer's copy until the next update; nobody else sees it
 
 ### Theme
 
-Since edrys-Lite 3.2.0 the classroom sends its light or dark theme with every update. edrys.js sets
+The classroom sends its light or dark theme with every update. edrys.js sets
 `Edrys.theme` and `<html data-theme="light|dark">` (which `edrys-module.css` follows), and calls the
 `Edrys.onTheme(fn)` handlers with the new theme whenever it changes, the first time with the first update
 (~500 ms, before `onReady`). `onTheme` returns a function that removes the handler.
 
 - Only code that colours things in JavaScript (editor and terminal themes, charts, canvases) needs `onTheme`;
   CSS on the `--edrys-*` variables switches by itself ([design-baseline.md](design-baseline.md#theme)).
-- Call it as `Edrys.onTheme?.(fn)`: an older edrys.js has no `onTheme`, and a throw at the top level of the
-  script stops the module before its `onReady`.
-- Without a theme from edrys-Lite (older version, the page opened on its own) there is no `data-theme`; fall
+- Without a theme from edrys-Lite (the page opened on its own) there is no `data-theme`; fall
   back to `matchMedia('(prefers-color-scheme: dark)')`.
+- With the theme comes the class design's main colour: edrys.js sets `--edrys-primary` and `--edrys-on-primary`
+  inline on `<html>`, or removes them for the Standard colour. A change of only that colour calls no `onTheme`
+  handler ([design-baseline.md](design-baseline.md#theme)).
 
 ### Configs
 

@@ -2,8 +2,8 @@
 
 What edrys-Lite reads from a module before it loads it: `scrapeModule` in
 [`src/ts/Utils.ts`](https://github.com/edrys-labs/edrys-Lite/blob/main/src/ts/Utils.ts), and the settings form in
-[`ModuleConfigForm.vue`](https://github.com/edrys-labs/edrys-Lite/blob/main/src/components/Settings/ModuleConfigForm.vue)
-(edrys-Lite 3.1.0). Check a module with `node scripts/check-module.mjs <file>`.
+[`ModuleConfigForm.vue`](https://github.com/edrys-labs/edrys-Lite/blob/main/src/components/Settings/ModuleConfigForm.vue).
+Check a module with `node scripts/check-module.mjs <file>`.
 
 There are three kinds of modules:
 
@@ -149,7 +149,6 @@ trailing commas. Escape `"` inside the attribute as `&quot;`, newlines in a valu
 | `color` | colour picker | `"#rrggbb"` | `"#000000"` |
 | anything else (`string`, missing) | one-line text field | string | `""` |
 
-`select` and `combobox` need edrys-Lite 3.1.0; older versions show them as text fields.
 
 ### Rules for a schema that matches the code
 

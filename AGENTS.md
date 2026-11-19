@@ -64,7 +64,7 @@ The skills are checked against the source, not against memory or older docs:
 | Classroom config import / deploy | [`src/views/Deploy.vue`](https://github.com/edrys-labs/edrys-Lite/blob/main/src/views/Deploy.vue), [`src/ts/Utils.ts`](https://github.com/edrys-labs/edrys-Lite/blob/main/src/ts/Utils.ts) |
 | User documentation | [edrys-labs/documentation](https://github.com/edrys-labs/documentation) |
 
-If the documentation and the source disagree, the source wins. Behaviour that changed between edrys-Lite releases is written with the version it depends on (e.g. "since edrys-Lite 3.1.0 …").
+If the documentation and the source disagree, the source wins. The skills describe the edrys-Lite that is deployed at edrys-labs.github.io: they are pushed only after edrys-Lite is deployed, so they name no edrys-Lite versions and say nothing about how older releases behave.
 
 ## Updating `README.md`
 
