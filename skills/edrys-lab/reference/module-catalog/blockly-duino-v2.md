@@ -40,7 +40,8 @@ this lab: without them the module is 250 × 200px (see [show-in-and-layout.md](.
 ## Notes
 
 **For:** block-based Arduino programming for beginners (BlocklyDuino v2), with the generated C++ shown next to
-the blocks. Everyone in a room edits **one shared program** (always shared, no switch). The run button (▶)
+the blocks. With `synchronize: true`, everyone in a room edits **one shared program**; without it (the
+default), each person builds their own program, kept in their browser. The run button (▶)
 sends the generated code as a message, like an editor's Execute: to [pyxtermjs](pyxtermjs.md) on a station
 (real board) or to [avr8js](avr8js.md) (simulation).
 
@@ -48,6 +49,7 @@ sends the generated code as a message, like an editor's Execute: to [pyxtermjs](
 
 | Key | Note |
 |-----|------|
+| `synchronize` | `true`: one program per room, edited together. Off (default, also what the settings form saves when unticked): each person's own program, saved in their browser per class and room. The board stays the room's in both modes. |
 | `code` | Start program as Blockly XML. Get it from the module (**Menu > Save to BlocklyDuino file**) or the [examples](https://github.com/edrys-labs/module-blockly-duino-v2/tree/main/examples). Empty: start with nothing. |
 | `board` | Board the room starts with (default `arduino_uno`); only sets which pins the blocks offer. |
 | `runCommand` | Subject of the run message, default `execute`. Must equal the runner's subject. |
@@ -59,6 +61,7 @@ sends the generated code as a message, like an editor's Execute: to [pyxtermjs](
   config:
     board: arduino_uno
     runCommand: execute
+    synchronize: true
     code: |
       <xml xmlns="https://developers.google.com/blockly/xml">
         <block type="board_base_inout_buildin_led" x="18" y="17">
@@ -74,7 +77,10 @@ sends the generated code as a message, like an editor's Execute: to [pyxtermjs](
 
 - `board` here does not choose what the code is compiled for: that is the runner's setting (pyxtermjs
   `board`). Keep both in agreement.
+- Leaving out `synchronize` gives every student their own program: set `synchronize: true` when a group
+  works on one program at a station. Before November 2026 the program was always shared.
 - Edits are sent 2 seconds after the last change; when two people edit within those 2 seconds, the later change
   wins. Fine for pair work, not for a whole class editing at once.
 - Changing `code` in the settings, or **Reset** in the menu, sets every room back to the configured program.
+  Without `synchronize`, a changed `code` replaces every saved own program, and Reset only resets your own.
 - Students don't see the board button, but that is only hidden, not a permission.
