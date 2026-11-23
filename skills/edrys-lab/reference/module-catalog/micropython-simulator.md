@@ -44,7 +44,8 @@ this lab: without them the module is 250 × 200px (see [show-in-and-layout.md](.
 **For:** MicroPython labs **without hardware**: a simulated **Calliope mini 3** or **BBC micro:bit v2** in every
 browser, with LEDs, buttons, pins, sound, sensor sliders and a serial terminal (`print`, `input()`, a `>>>`
 prompt). Runs completely in the browser (WebAssembly); no code is sent to a server. No station needed. Takes code
-from an editor ([monaco-editor](monaco-editor.md) with `language: python`).
+from an editor ([monaco-editor](monaco-editor.md) with `language: python`, or blocks in
+[blockly-micropython](blockly-micropython.md)).
 
 **Only `config` is read.**
 

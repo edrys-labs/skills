@@ -3,8 +3,9 @@ name: edrys-lab
 description: >
   Use when creating, editing, reviewing or debugging an edrys-Lite lab, that is
   a classroom configuration (YAML or JSON) for https://edrys-labs.github.io:
-  choosing and configuring modules (Markdown, code editor, terminal, camera
-  stream, serial, Arduino or MicroPython simulator, whiteboard, survey, …),
+  choosing and configuring modules (Markdown, code editor, block
+  programming with Blockly, terminal, camera stream, serial, Arduino or
+  MicroPython simulator, whiteboard, survey, …),
   per-role configs (config, studentConfig, teacherConfig, stationConfig),
   rooms, showInCustom and module sizes, setting up a station computer with
   hardware (Docker terminal server, Web Serial, webcam), or publishing a lab
@@ -76,6 +77,7 @@ Start from the closest example instead of a blank file:
 | [iframe](reference/module-catalog/iframe.md) | embedding any web page or HTML | any |
 | [monaco-editor](reference/module-catalog/monaco-editor.md) | code editor; Execute sends code to a runner | with its runner |
 | [blockly-duino-v2](reference/module-catalog/blockly-duino-v2.md) | block-based Arduino programming | with its runner |
+| [blockly-micropython](reference/module-catalog/blockly-micropython.md) | block-based MicroPython (Calliope mini, micro:bit, any board), blocks and Python side by side | with its runner |
 | [pyxtermjs](reference/module-catalog/pyxtermjs.md) | shell on the station computer; compiles and uploads code | `station` |
 | [serial](reference/module-catalog/serial.md) | a device's serial console via Web Serial | `station` |
 | [micropython-webrepl](reference/module-catalog/micropython-webrepl.md) | REPL of a Wi-Fi MicroPython board | `station` |
@@ -154,6 +156,7 @@ peer IDs in `members`. When starting from an exported or older lab, delete them 
 |---------|--------|
 | Real hardware students control remotely | Yes: a station next to the hardware ([stations.md](reference/stations.md)). |
 | Arduino or micro:bit without hardware | Yes: avr8js, micropython-simulator. No station needed. |
+| Programming with blocks for beginners | Yes: blockly-duino-v2 (Arduino), blockly-micropython (Calliope mini, micro:bit, MicroPython). |
 | Group work in separate rooms | Yes: `meta.defaultNumberOfRooms` and `showInCustom: Room *` (or per room). |
 | Teacher decides who goes where | Yes: `meta.teacherMovesStudents: true`; students wait in the Lobby until a teacher moves them. |
 | A look for younger learners, a denser screen, or the school's colours | Yes: `meta.design: playful` / `compact`, or `custom` with `meta.customDesign` ([config-format.md](reference/config-format.md#class-design)). Colours, font, corners and sizes only; no layout changes, no CSS. Modules take only the main colour. |

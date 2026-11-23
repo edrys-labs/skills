@@ -52,7 +52,8 @@ this lab: without them the module is 250 × 200px (see [show-in-and-layout.md](.
 ## Notes
 
 **For:** a real terminal on the station computer, shared with everyone in the station room. It also runs code
-sent by an editor ([monaco-editor](monaco-editor.md), [blockly-duino-v2](blockly-duino-v2.md)) through a script:
+sent by an editor ([monaco-editor](monaco-editor.md), [blockly-duino-v2](blockly-duino-v2.md),
+[blockly-micropython](blockly-micropython.md)) through a script:
 compile and upload an Arduino sketch, flash MicroPython, run Python, … The station's browser connects to a
 terminal server on the station computer; see [stations.md](../stations.md) for running it.
 

@@ -6,6 +6,7 @@
   { "file": "serial", "url": "https://edrys-labs.github.io/module-serial/", "repo": "edrys-labs/module-serial" },
   { "file": "avr8js", "url": "https://edrys-labs.github.io/module-avr8js/index.html", "repo": "edrys-labs/module-avr8js" },
   { "file": "blockly-duino-v2", "url": "https://edrys-labs.github.io/module-blockly-duino-v2/index.html", "repo": "edrys-labs/module-blockly-duino-v2" },
+  { "file": "blockly-micropython", "url": "https://edrys-labs.github.io/module-blockly-micropython/index.html", "repo": "edrys-labs/module-blockly-micropython" },
   { "file": "arduinoview", "url": "https://edrys-labs.github.io/module-arduinoview/index.html", "repo": "edrys-labs/module-arduinoview" },
   { "file": "micropython-simulator", "url": "https://edrys-labs.github.io/module-micropython-simulator/index.html", "repo": "edrys-labs/module-micropython-simulator" },
   { "file": "micropython-webrepl", "url": "https://edrys-labs.github.io/module-micropython-webrepl/", "repo": "edrys-labs/module-micropython-webrepl" },

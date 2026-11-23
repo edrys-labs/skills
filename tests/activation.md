@@ -27,6 +27,7 @@ other skill.
 | L6 | Make a simulated micro:bit lab for 25 students, no hardware. | edrys-lab |
 | L7 | Can I hide the solutions from students in my Edrys lab? | edrys-lab |
 | L8 | Füge meinem Edrys-Labor am Ende einen Fragebogen hinzu. | edrys-lab |
+| L9 | Erstelle ein Edrys-Labor, in dem Kinder einen Calliope mini mit Blöcken programmieren. | edrys-lab |
 
 ## edrys-module
 
