@@ -159,7 +159,9 @@ Edrys.onReady(() => {
 
 ## Streams
 
-The station (or whoever has the camera) sends; everyone else in the room receives. Sender and receiver must be
+A station or a teacher sends; everyone else in the room receives. **Receivers ignore a stream sent by a
+student**: they take the stream's whereabouts only from a peer whose role (from the signed presence) is
+`station` or `teacher`, so a student can't replace the station's video. Sender and receiver must be
 **the same module URL** (the handshake uses non-promiscuous messages) and must use **the same `streamName`** and
 `method`. Set `streamName` explicitly on both sides: without it, WebRTC senders default to `"<username>-stream"`
 while receivers default to `"Camera 1"`, and nothing connects.
@@ -182,7 +184,10 @@ Edrys.onReady(async () => {
 ```
 
 - WebRTC (default) uses the class's STUN/TURN servers and PeerJS's public signalling server unless
-  `peerServerConfig` names another. `method: 'websocket'` needs a relay server at `websocketUrl`, run by you.
+  `peerServerConfig` names another. `method: 'websocket'` needs a relay server at `websocketUrl`, run by you
+  (a current `@edryslabs/websocket-server`: the sender proves it is the source with a secret key, which older
+  relays ignore and newer ones require). It also needs the module served over https (or from localhost):
+  the key is hashed with `crypto.subtle`, which plain-http pages don't have.
 - The receiver retries every 3 s until media arrives, and the sender re-announces on request, so start order
   doesn't matter. A station reload reconnects viewers on its own.
 - Several cameras at one station: one module entry per camera, each with its own `streamName` in

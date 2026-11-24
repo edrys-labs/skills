@@ -113,6 +113,7 @@ None of these shows an error in edrys-Lite; the module just doesn't work.
 | Keeping the first `getState(key, 'Map')` forever | after a simultaneous create the peer is cut off | rebind on `keysChanged` |
 | A second copy of Yjs in a bundle | "Unexpected content type", bindings don't sync | alias `yjs` to `window.Y` |
 | `sendStream`/`onStream` without the same `streamName` | stream never connects | explicit `streamName` on both sides |
+| `sendStream` from a student | receivers ignore it | send from the station (or a teacher) |
 | Boolean field on by default without `default: true` in the schema | the first Save in the form turns it off | declare `default` |
 | YAML module: `module-config` as a map, or `show-in` as a string | no settings form / module fails to load | `module-config: \|` string; `show-in: ['*']` |
 | YAML or `fetch` module with `…`, `ü`, `✓` | shown as `%u2026` | `&hellip;` in HTML, `\u2026` in JS |
